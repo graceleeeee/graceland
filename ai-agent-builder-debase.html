@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Builder — Grace Lee</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf9f5;
+    --orange: #FF5500;
+    --orange-light: #fff3e8;
+    --text: #0a0a3a;
+    --muted: #555;
+    --rule: rgba(255,85,0,0.15);
+    --black: #0a0a3a;
+    --off-white: #fdf9f5;
+    --accent: #FF5500;
+    --accent-light: #fff3e8;
+    --warm-gray: #aaa;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 60px;
+    border-bottom: 1px solid rgba(255,85,0,0.2);
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 100;
+  }
+  .nav-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+  .nav-name-text {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+    color: var(--orange);
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    padding: 100px 60px 80px;
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .hero-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1;
+    color: var(--black);
+    font-weight: 400;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .meta-item label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .meta-item p {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .tag {
+    background: var(--orange);
+    color: white;
+    padding: 5px 14px;
+    border-radius: 99px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--rule);
+    margin: 0 60px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin: 0 auto;
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 60px;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 6px;
+    line-height: 1.4;
+  }
+  .section-content h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--black);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .section-content p {
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .section-content p:last-child { margin-bottom: 0; }
+
+  /* FULL-BLEED IMAGE BREAK */
+  .img-break {
+    padding: 0 60px;
+    margin: 0 0 0 0;
+  }
+  .img-break img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+  .img-break-grid {
+    padding: 0 60px;
+    display: grid;
+    gap: 24px;
+  }
+  .img-break-grid img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+  .img-caption {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    background: var(--orange);
+    color: white;
+    padding: 56px 60px;
+    margin: 0;
+  }
+  .pull-quote blockquote {
+    max-width: 820px;
+    margin: 0 auto;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1.45;
+    color: white;
+  }
+  .pull-quote cite {
+    display: block;
+    margin-top: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* INSIGHTS GRID */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 32px;
+  }
+  .insight-card {
+    background: var(--off-white);
+    padding: 32px 28px;
+  }
+  .insight-card h4 {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .insight-card p {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* DECISIONS */
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    margin-top: 32px;
+  }
+  .decision {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .decision-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.4rem;
+    color: var(--rule);
+    line-height: 1;
+    font-weight: 400;
+  }
+  .decision h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--black);
+    margin-bottom: 8px;
+  }
+  .decision p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .metrics-bar {
+    background: #1c1a17;
+    padding: 64px 0;
+  }
+  .metrics-inner {
+    padding: 0 60px;
+  }
+  .metrics-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .metric h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #fdf9f5;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .metric p {
+    font-size: 0.88rem;
+    color: #7a7670;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* TRADEOFF */
+  .tradeoff-box {
+    background: #f5f3ef;
+    border: 1px solid var(--rule);
+    padding: 36px;
+    margin-top: 32px;
+  }
+  .tradeoff-box h4 {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .tradeoff-box p {
+    font-size: 0.92rem;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* ROADMAP */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 32px;
+  }
+  .roadmap-phase {
+    background: var(--off-white);
+    padding: 28px 24px;
+  }
+  .roadmap-phase h4 {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .roadmap-phase h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
+  .roadmap-phase ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .roadmap-phase li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding-left: 12px;
+    position: relative;
+  }
+  .roadmap-phase li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--rule);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,85,0,0.2);
+    padding: 10px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--cream);
+  }
+  .footer-left {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-right {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .proto-link {
+    display: inline-block;
+    background: var(--black);
+    color: var(--off-white);
+    padding: 12px 28px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .proto-link:hover { background: var(--accent); }
+
+  @media (max-width: 860px) {
+    nav { padding: 20px 24px; }
+    .hero, .section { padding: 60px 24px; grid-template-columns: 1fr; gap: 32px; }
+    .pull-quote, .metrics-bar { padding: 48px 24px; }
+    .divider { margin: 0 24px; }
+    .metrics-grid, .insights-grid { grid-template-columns: 1fr; }
+    .roadmap { grid-template-columns: 1fr 1fr; }
+    footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+
+    /* Customer outcomes grid — 2x2 on mobile */
+    .outcomes-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Roadmap timeline — hide horizontal, show vertical */
+    #roadmap-horizontal { display: none !important; }
+    #roadmap-vertical { display: block !important; }
+  }
+
+  @media (max-width: 1100px) {
+    /* Scrollytelling — switch to stacked earlier */
+    #scrolly { display: block !important; padding: 0 24px !important; }
+    #scrolly-text { display: none !important; }
+    #scrolly-sticky { display: none !important; }
+    #scrolly-mobile { display: flex !important; }
+    #scrolly-v2 { display: none !important; }
+    #scrolly-v2-mobile { display: flex !important; }
+  }
+
+  @media (max-width: 1200px) and (min-width: 861px) {
+    .section { grid-template-columns: 200px 1fr; }
+    .hero { grid-template-columns: 200px 1fr; }
+    .section-label { font-size: 0.65rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">
+    <span class="nav-name-text">Grace Lee</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>AI Agent Builder</h1>
+    <p style="margin-top: 16px; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);">Designing a No-Code AI Agent Builder</p>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <label>Overview</label>
+      <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Regal's AI Agent Builder is a no-code platform for deploying customer-facing AI agents.</p>
+    </div>
+    <div class="meta-item">
+      <label>Role</label>
+      <p>Principal Product Designer</p>
+      <p style="margin-top: 10px; font-size: 0.88rem; color: var(--muted); line-height: 1.6;">As the sole designer owning the end-to-end design process, I built Regal's AI Agent Platform from the ground up — from strategy and research to shipping the MVP and beyond.</p>
+    </div>
+    <div class="meta-item">
+      <label>Scope</label>
+      <div class="tag-row">
+        <span class="tag">Product Strategy</span>
+        <span class="tag">User Research</span>
+        <span class="tag">UI/UX Design</span>
+        <span class="tag">Prototyping & Testing</span>
+      </div>
+    </div>
+    <div class="meta-item">
+      <label>Timeline</label>
+      <p>Q1 2025 (MVP launch) → Q3 2025 (V2)</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="img-break" style="padding-bottom: 80px;">
+  <img src="images/ai-agents-hero.png" alt="AI Agent Builder interface" />
+</div>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="section-label">The Problem</div>
+  <div class="section-content">
+    <h2>Stuck Between Power and Usability</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">How can Sales Leaders innovate and enable AI in their processes?</p>
+    <p>When AI Agents became a product offering on Regal, there was no dedicated in-app tool to build them, so customers had no way to get started on their own and were completely dependent on Regal's FDE team to deploy an AI Agent, which wasn't scalable.</p>
+    <p style="margin-top: 16px;">Our users are AI-curious and want to automate workflows, but they're focused on business outcomes, not figuring out how to prompt or tinker with AI.</p>
+
+    <div class="tradeoff-box" style="margin-top: 32px;">
+      <h4>Takeaway</h4>
+      <p>We needed to build a tool that both customers could use to build robust AI agents without too much technical expertise and leaning too much on Regal's FDE team.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- OBJECTIVES DIVIDER HIDDEN -->
+
+<!-- OBJECTIVES -->
+<section class="section" style="display:none;">
+  <div class="section-label">Objectives</div>
+  <div class="section-content">
+    <h2>The AI Land Grab</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Be the premier provider of AI Agents for Sales and Support use cases.</p>
+    <p>The main business objective was to bring in AI customers and revenue:</p>
+    <ul style="margin: 12px 0 16px 20px; display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+      <li>From 0 → 10 paying AI Agent customers</li>
+      <li>From 0 → 120 AI Agents</li>
+    </ul>
+    <p>Success also meant enabling AI agents to drive real business outcomes across multiple verticals:</p>
+
+    <table style="width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.9rem; background: var(--accent-light); border: 1px solid var(--rule);">
+      <thead>
+        <tr style="background: var(--accent); color: var(--off-white);">
+          <th style="padding: 14px 20px; text-align: left; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; width: 40%;">User Type</th>
+          <th style="padding: 14px 20px; text-align: left; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;">Success Definition</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--rule);">
+          <td style="padding: 16px 20px; font-weight: 500; color: var(--black); background: white;">Support &amp; CX Teams</td>
+          <td style="padding: 16px 20px; color: var(--text); background: white;">Contain and resolve inquiries without needing a human agent (containment, CSAT)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--rule);">
+          <td style="padding: 16px 20px; font-weight: 500; color: var(--black); background: white;">Sales &amp; Lead Gen</td>
+          <td style="padding: 16px 20px; color: var(--text); background: white;">Qualify leads, increase conversion, and maximize revenue per lead</td>
+        </tr>
+        <tr>
+          <td style="padding: 16px 20px; font-weight: 500; color: var(--black); background: white;">Operations</td>
+          <td style="padding: 16px 20px; color: var(--text); background: white;">Reduce cost per interaction and minimize human touchpoints</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section class="section">
+  <div class="section-label">Research</div>
+  <div class="section-content">
+    <h2>Getting to Know the AI Landscape</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">How can we empower our users to innovate with and benefit from AI?</p>
+    <p>Our existing "Sales Leader" persona — a tech-lite, non-engineer who invests deeply in hitting their conversion and revenue goals and is curious about AI — from a previous UX study I conducted, helped shape how I framed my research:</p>
+
+    <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 32px; max-width: 640px;">
+
+      <div>
+        <p style="font-weight: 500; text-decoration: underline; margin-bottom: 10px;">Competitive Research</p>
+        <p>Most tools were either too complex or too simple — and all assumed users could prompt. From the research I was also able to identify requirements to design for, like the need for a testing experience.</p>
+        <img src="images/competitive-analysis.png" alt="Competitive Analysis" style="width: 100%; margin-top: 20px; border-radius: 8px;" />
+      </div>
+
+      <div>
+        <p style="font-weight: 500; text-decoration: underline; margin-bottom: 10px;">Subject Matter Interviews</p>
+        <p>Talking with internal teams surfaced two things:</p>
+        <ul style="margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+          <li>Building an effective AI agent follows a kind of formula. There's a consistent structure.</li>
+          <li>Testing wasn't a final step — it happened with every incremental change.</li>
+        </ul>
+        <img src="images/sme.png" alt="Subject Matter Interview Framework" style="width: 100%; margin-top: 20px; border-radius: 8px;" />
+      </div>
+
+      <div>
+        <p style="font-weight: 500; text-decoration: underline; margin-bottom: 10px;">Customer Insights</p>
+        <p>Some of our customers were already experimenting with AI to start automating repetitive tasks but didn't know where to start or had issues getting something production ready.</p>
+        <blockquote style="margin-top: 24px; padding: 28px 32px; background: white; border-left: 3px solid var(--orange); border-radius: 0;">
+          <p style="font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--black); line-height: 1.5; margin-bottom: 12px;">"I'm optimistic about the power of AI on our business - but we haven't found a tool that works for the way we actually run our business"</p>
+          <cite style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-style: normal;">Sales Leader, Current Regal Customer</cite>
+        </blockquote>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HYPOTHESIS -->
+<section class="section">
+  <div class="section-label">Hypothesis</div>
+  <div class="section-content">
+    <h2>From Insight to Direction</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Designing for a New Experience</p>
+    <p>Based on feedback from customers and learnings from SME interviews and competitive analysis, Regal's Agent Builder experience needs to inspire instead of overwhelm. By designing a guided experience that also limits upstart effort, we believed opinionated structure could outperform open-ended flexibility for non-technical users.</p>
+
+    <div class="tradeoff-box" style="margin-top: 32px;">
+      <h4>Hypothesis</h4>
+      <p>If Regal's AI Agent Builder is designed to be structured and guided, then non-technical users would be able to create successful AI Agents - without needing extra support from internal resources or Regal's internal teams.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WIREFRAMING -->
+<section class="section">
+  <div class="section-label">Ideation Phase</div>
+  <div class="section-content">
+    <h2>Wireframing &amp; Sketching</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Aligning with Stakeholders Before Designing</p>
+    <p>This was a 0-to-1 greenfield project, so I started the ideation phase with some sketches.</p>
+
+    <img src="images/sketches.png" alt="Notebook sketches" style="width: 100%; margin-top: 20px; border-radius: 8px;" />
+
+    <p style="margin-top: 24px;">The sketches helped me formulate design questions, so I translated those into illustrative mocks and brought them to a kickoff meeting with my PM and CPO to get input before committing to real design work:</p>
+    <ul style="margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+      <li><strong>Architecture</strong> — Should the AI Agent experience live as a standalone page within the Regal App?</li>
+      <li><strong>Agent Building Experience</strong> — What should the UX of the builder be: form vs. wizard?</li>
+      <li><strong>Visual Direction</strong> — Since this is a pivotal product moment for Regal, should the experience feel like a departure from existing app styling?</li>
+    </ul>
+
+    <img src="images/wire.png" alt="Form vs Wizard wireframe" style="width: 100%; margin-top: 20px; border-radius: 8px;" />
+
+    <p style="margin-top: 24px;">During this meeting, I facilitated alignment around the Form UX by grounding my recommendation with insights from my research:</p>
+    <ul style="margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+      <li>From my SME interviews, I learned that building an AI Agent follows a structure. The right UI would make the formula visible and not obscure it behind sequential steps.</li>
+      <li>A Wizard flow would work best as an intake experience — asking questions to generate something on the user's behalf. While it's a compelling idea, each step becomes a blank canvas, which is the exact problem we were trying to solve.</li>
+      <li>Competitive analysis showed unstructured, giant freeform inputs or steps broken up by tabs — which felt like overkill for our users.</li>
+    </ul>
+
+    <div class="tradeoff-box" style="margin-top: 32px;">
+      <h4>The Takeaway</h4>
+      <p>A structured form was the only pattern that didn't fall into either trap.</p>
+    </div>
+
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.4rem; font-weight: 400; color: var(--black); margin-top: 48px; margin-bottom: 8px;">From Decision to Flow</h3>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Defining the MVP</p>
+    <p>The meeting helped me define an MVP flow made up of 3 pages:</p>
+    <ul style="margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+      <li><strong>Template Page</strong> — Where users can browse templates and start the process.</li>
+      <li><strong>Builder Page</strong> — Where users can edit and tailor the template to their specific needs (and eventually build from scratch).</li>
+      <li><strong>Agent List Page</strong> — Where saved agents are stored.</li>
+    </ul>
+
+    <img src="images/user-flow.svg" alt="MVP flow diagram" style="width: 60%; margin-top: 20px; display: block; margin-left: auto; margin-right: auto;" />
+
+    <p style="margin-top: 24px;">Each page then went through multiple rounds of design options — except the list page, which reused an existing pattern. Knowing that AI Agents was a pivotal moment for Regal, I made a deliberate choice to push the template page visually, despite directions to stay within existing styling to signal a meaningful shift in Regal's platform.</p>
+
+    <img src="images/template-exploration.png" alt="Template page explorations" style="width: 100%; margin-top: 20px; border-radius: 8px;" />
+
+    <p style="margin-top: 24px;">The builder form also went through rounds of layout exploration. The core challenge was figuring out how to organize all the required pieces into a single page that felt structured — not overwhelming.</p>
+  </div>
+</section>
+
+<div class="img-break" style="padding-bottom: 80px;">
+  <img src="images/builder-exploration-final.png" alt="Builder page explorations" />
+</div>
+
+<div class="divider"></div>
+
+<!-- STRATEGY -->
+<section class="section">
+  <div class="section-label">Product Strategy &amp; Design Decisions</div>
+  <div class="section-content">
+    <h2>Design Framework</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Translating Insights to Product Direction</p>
+    <p>The biggest design challenge was balancing clarity and complexity - the solution needed to support a wide range of requirements such as guided prompting, customizable agent settings, and function-calling flows (Actions) into a single experience.</p>
+    <p style="margin-top: 16px;">I drove three key decisions that shaped the product's direction:</p>
+    <div class="decision-list">
+      <div class="decision">
+        <span class="decision-num">01</span>
+        <div>
+          <h3>Templates as Launchpad</h3>
+          <p>Rather than opening on a blank builder, I pushed for templates that reflected the most common use cases from interviews. This gave users a concrete starting point, reduced time-to-first-value, and let them see what "good" looked like before they customized anything. I presented this framing to leadership to get buy-in over a more open-ended approach.</p>
+          <img src="images/template-launchpad.png" alt="Templates as Launchpad" style="width: 100%; margin-top: 16px; border-radius: 8px;" />
+        </div>
+      </div>
+      <div class="decision">
+        <span class="decision-num">02</span>
+        <div>
+          <h3>Structured Inputs Over Freeform Prompting</h3>
+          <p>I made the call to break prompting into discrete, labeled sections rather than a single open text field — the industry default. This reduced cognitive load, passively taught users what makes an effective agent, and produced higher-quality outputs from day one. The tradeoff was flexibility for power users, which I scoped as a V2 concern.</p>
+          <img src="images/structured-inputs.png" alt="Structured Inputs" style="width: 100%; margin-top: 16px; border-radius: 8px;" />
+        </div>
+      </div>
+      <div class="decision">
+        <span class="decision-num">03</span>
+        <div>
+          <h3>Validate Before Launch</h3>
+          <p>Since testing is woven throughout the build process, I pushed for an in-product testing experience so users can fluidly edit and test an agent without leaving the builder. Collapsing the feedback loop into one place meant users can deploy confidently rather than discovering problems when the agent is already live.</p>
+        </div>
+      </div>
+      <div class="decision">
+        <span class="decision-num">04</span>
+        <div>
+          <h3>Scoped Out Power User Entry Points</h3>
+          <p>I pushed for two additional ways to start building an agent: a blank canvas for more experienced users who didn't need the guardrails, and the ability to upload a call recording or script to auto-generate an agent — a more sophisticated solve for the blank canvas problem that met users where their existing knowledge actually lived. Both got deprioritized due to resourcing and timeline constraints.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HI-FI DESIGNS -->
+<section class="section">
+  <div class="section-label">Design</div>
+  <div class="section-content" style="padding-bottom: 24px;">
+    <h2>Hi-Fidelity Designs</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Bringing AI Agents to Life</p>
+    <p>The high-fidelity designs translated complex product requirements into a cohesive, intuitive interface. Regal users can now build, test, and deploy AI agents with confidence.</p>
+
+  </div>
+</section>
+
+<div style="padding: 0 60px 80px;">
+  <div style="margin-bottom: 20px;">
+    <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Single State Agent Workflow — Updated 2026</p>
+    <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.7;">Use the prototype below <a href="https://www.figma.com/proto/Fw1nj7WnmxAWIsGtVebNSw/Regal.ai---AI-Agent-Builder-Case-Study?page-id=0%3A1&node-id=103-28532&viewport=-7825%2C366%2C0.34&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=103%3A28532" target="_blank" style="color: var(--orange); text-decoration: underline; text-underline-offset: 3px;">or view it in Figma</a> to walk through the end-to-end flow of building an AI Agent — from selecting a template to configuring the agent to testing.</p>
+  </div>
+  <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--rule);">
+    <iframe style="border: none; display: block;" width="100%" height="600" src="https://embed.figma.com/proto/Fw1nj7WnmxAWIsGtVebNSw/Regal.ai---AI-Agent-Builder-Case-Study?page-id=0%3A1&node-id=103-28532&viewport=-7825%2C366%2C0.34&scaling=scale-down&content-scaling=fixed&starting-point-node-id=103%3A28532&embed-host=share" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- SCROLLYTELLING HIFI -->
+<div id="scrolly" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 60px; position: relative;">
+
+  <!-- Left: sticky text panels -->
+  <div id="scrolly-text" style="position: relative;">
+    <div class="scrolly-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Template Page</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Discovery Aid</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Templates reduced the cognitive load of starting from scratch and helped users understand what's needed to deploy an AI agent. It also helped spark ideas on how a user can leverage AI agents for other use cases.</p>
+      </div>
+    </div>
+    <div class="scrolly-step" data-index="1" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Builder Page</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Translating a Workflow into UI</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">The builder interface made the underlying structure of effective AI agents visible. By listing out each part of the "formula", a user can passively learn the requirements of a successful AI Agent while building.</p>
+      </div>
+    </div>
+    <div class="scrolly-step" data-index="2" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Model Settings</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Configuration without Complexity</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Technical capabilities like voice and model settings were designed in approachable dropdowns so AI configurations can feel manageable.</p>
+      </div>
+    </div>
+    <div class="scrolly-step" data-index="3" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Actions</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Conversation AND Execution</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Translated backend capabilities into composable building blocks so non-technical teams can create operational AI Agents without having to write a lick of JSON.</p>
+      </div>
+    </div>
+    <div class="scrolly-step" data-index="4" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">05 — Settings</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Designing for Real World Behavior</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Beyond the core configurations, the builder also accounted for edge cases and conversational nuance so agents can feel more human and handle the unexpected.</p>
+      </div>
+    </div>
+    <div class="scrolly-step" data-index="5" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">06 — Testing</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">QAing While Building</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Testing in-context meant users could catch gaps in their prompts, tune the voice, and build confidence without spinning up a live campaign first.</p>
+      </div>
+    </div>
+    <div class="scrolly-step" data-index="6" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">07 — Agent List Page</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Lifecycle Management</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">AI Agents are now a core part of user's Regal experience. A management layer reinforced that an AI agent is a living system that can be continuously refined and requires monitoring.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: sticky image -->
+  <div id="scrolly-sticky" style="position: sticky; top: 80px; height: calc(100vh - 160px); display: flex; align-items: center; align-self: start;">
+    <div style="position: relative; width: 100%;">
+      <img id="scrolly-img-0" src="images/final-template-page.png" alt="Template page" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 0.4s ease;" />
+      <img id="scrolly-img-1" src="images/final-build-page.png" alt="Builder page" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-img-2" src="images/final-model-settings.gif" alt="Model settings" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-img-3" src="images/final-actions.png" alt="Actions" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-img-4" src="images/final-settings.gif" alt="Settings" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-img-5" src="images/testing-1.png" alt="Test mode" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-img-6" src="images/final-list-page.png" alt="Agent list page" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <!-- spacer to give the relative container height -->
+      <img src="images/final-template-page.png" style="width: 100%; border-radius: 8px; display: block; visibility: hidden;" />
+    </div>
+  </div>
+
+</div>
+
+<!-- SCROLLYTELLING MOBILE — stacked -->
+<div id="scrolly-mobile" style="display: none; flex-direction: column; gap: 60px; padding: 60px 24px;">
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Template Page</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Discovery Aid</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Besides giving users a blueprint, templates can also spark ideas on how AI Agents can drive value for their business.</p>
+    <img src="images/final-template-page.png" alt="Template page" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Builder Page</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Structured and Guided Experience</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Organizing the builder into a split layout reduces cognitive load while giving users complexity at their fingertips.</p>
+    <img src="images/final-build-page.png" alt="Builder page" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Model Settings</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Built for Flexibility</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Users can easily configure the basics — model, voice, and language — before diving into prompting.</p>
+    <img src="images/final-model-settings.gif" alt="Model settings" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Actions</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Agent Toolkit</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Configure the execution of actual tasks without code.</p>
+    <img src="images/final-actions.png" alt="Actions" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">05 — Settings</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Fine-Tuning</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Settings that make agents feel more human and handle the moments when customers don't pick up.</p>
+    <img src="images/final-settings.gif" alt="Settings" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">06 — Testing</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">QAing While Building</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Testing in-context meant users could catch gaps in their prompts, tune the voice, and build confidence without spinning up a live campaign first.</p>
+    <img src="images/testing-1.png" alt="Test mode" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">07 — Agent List Page</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Deployed Agents</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Simple list view where users can always come back and revise deployed agents.</p>
+    <img src="images/final-list-page.png" alt="Agent list page" style="width: 100%; border-radius: 8px;" />
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="metrics-bar">
+  <div class="metrics-inner">
+    <p class="metrics-label">Results — Q2 2025</p>
+    <h2 style="color: #fdf9f5; font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; margin-bottom: 8px;">The Results</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px;">From Launch to Impact</p>
+    <p style="color: #b8b4aa; max-width: 720px; margin-bottom: 40px;">Within the first quarter after launching the MVP Agent Builder, customers could get to a live, deployed agent much quicker with less reliance on Regal's internal team. The structured onboarding model reduced implementation friction enough that customers could independently deploy production-ready agents across multiple industries. We saw successful agent deployments across multiple use cases — validating that the structured, guided approach worked in practice:</p>
+
+    <!-- Customer outcomes grid — 4 across -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); margin-bottom: 40px;" class="outcomes-grid">
+      <div style="background: #252219; padding: 28px 24px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;">Medicare Advantage</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: #fdf9f5; margin-bottom: 16px;">Qualification</p>
+        <p style="font-family: 'Instrument Serif', serif; font-size: 2.4rem; font-weight: 400; color: #fdf9f5; line-height: 1; margin-bottom: 6px;">96%</p>
+        <p style="font-size: 0.82rem; color: #7a7670;">CSAT for AI Agents</p>
+      </div>
+      <div style="background: #252219; padding: 28px 24px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;">Roadside Assistance</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: #fdf9f5; margin-bottom: 16px;">Notice of Disablement</p>
+        <p style="font-family: 'Instrument Serif', serif; font-size: 2.4rem; font-weight: 400; color: #fdf9f5; line-height: 1; margin-bottom: 6px;">60%</p>
+        <p style="font-size: 0.82rem; color: #7a7670;">Containment Rate</p>
+      </div>
+      <div style="background: #252219; padding: 28px 24px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;">eCommerce</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: #fdf9f5; margin-bottom: 16px;">Customer Support</p>
+        <p style="font-family: 'Instrument Serif', serif; font-size: 2.4rem; font-weight: 400; color: #fdf9f5; line-height: 1; margin-bottom: 6px;">73%</p>
+        <p style="font-size: 0.82rem; color: #7a7670;">Solution Identified</p>
+      </div>
+      <div style="background: #252219; padding: 28px 24px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;">Insurance</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: #fdf9f5; margin-bottom: 16px;">Collections</p>
+        <p style="font-family: 'Instrument Serif', serif; font-size: 2.4rem; font-weight: 400; color: #fdf9f5; line-height: 1; margin-bottom: 6px;">60%</p>
+        <p style="font-size: 0.82rem; color: #7a7670;">Collection Rate (Even with Humans)</p>
+      </div>
+    </div>
+
+    <p style="color: #b8b4aa; max-width: 720px; margin-bottom: 48px;">These outcomes validated the core design bets — templates reduced onboarding friction, structured inputs produced more reliable agents, and the scoped MVP let us iterate quickly once real usage patterns emerged.</p>
+
+    <!-- Business metrics -->
+    <div class="metrics-grid" style="margin-bottom: 48px;">
+      <div class="metric">
+        <h3>8</h3>
+        <p>Paying AI Agent brands<br>(goal: 10)</p>
+      </div>
+      <div class="metric">
+        <h3>31</h3>
+        <p>Live AI Agents deployed<br>(goal: 35)</p>
+      </div>
+      <div class="metric">
+        <h3>422k</h3>
+        <p>Tasks completed by agents<br>every 30 days</p>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ROADMAP -->
+<section class="section" style="display: block; padding: 80px 60px;">
+  <div class="section" style="padding: 0; margin-bottom: 48px;">
+    <div class="section-label">Roadmap Influence</div>
+    <div class="section-content">
+      <h2>Where the Product Stands Today</h2>
+      <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px;">From MVP to Full Platform</p>
+      <p style="color: var(--muted); font-size: 1rem; line-height: 1.75;">My involvement didn't end at MVP. I helped shape the post-launch roadmap based on emerging user needs — and the Agent Builder has continued to mature.</p>
+    </div>
+  </div>
+
+  <!-- ARROW TIMELINE — horizontal desktop -->
+  <div id="roadmap-horizontal" style="position: relative; overflow: visible;">
+
+    <!-- Connecting line -->
+    <div style="position: absolute; top: 28px; left: 0; right: 60px; height: 2px; background: rgba(255,85,0,0.25); z-index: 0;"></div>
+
+    <!-- Arrow head — solid orange -->
+    <div style="position: absolute; top: 20px; right: 52px; width: 0; height: 0; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 14px solid rgba(255,85,0,0.5); z-index: 1;"></div>
+
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; z-index: 2;">
+
+      <!-- MVP -->
+      <div style="padding: 0 20px 0 0;">
+        <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--orange); margin-bottom: 20px; margin-top: 23px;"></div>
+        <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;">MVP · Q1 2025</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 12px;">Foundation</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 5px;">
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Templates</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Structured Inputs</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Test Audio + LLM</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Core Actions</li>
+        </ul>
+      </div>
+
+      <!-- V1 -->
+      <div style="padding: 0 20px;">
+        <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--orange); margin-bottom: 20px; margin-top: 23px;"></div>
+        <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;">V1 · Late Q2 2025</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 12px;">Knowledge & Testing</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 5px;">
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>RAG / Knowledge Base</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Test Cases + Simulations</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Expanded Actions</li>
+        </ul>
+      </div>
+
+      <!-- V1.5 -->
+      <div style="padding: 0 20px;">
+        <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--orange); margin-bottom: 20px; margin-top: 23px;"></div>
+        <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;">V1.5 · Late Q2 2025</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 12px;">Analysis</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 5px;">
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Post-Call Analysis</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Collected Variables</li>
+        </ul>
+      </div>
+
+      <!-- V2 -->
+      <div style="padding: 0 20px;">
+        <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--orange); margin-bottom: 20px; margin-top: 23px;"></div>
+        <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;">V2 · Q3–4 2025</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 12px;">Advanced Control</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 5px;">
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Conversation Flows</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>SMS AI Agents</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Start from Scratch</li>
+        </ul>
+      </div>
+
+      <!-- Q1 2026 -->
+      <div style="padding: 0 0 0 20px;">
+        <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--orange); margin-bottom: 20px; margin-top: 23px;"></div>
+        <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;">Q1 2026</p>
+        <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 12px;">Platform Maturity</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 5px;">
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Agent Drafts + Variants</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>AI Agent Versions</li>
+          <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Global Nodes + Actions</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VERTICAL TIMELINE — mobile only -->
+  <div id="roadmap-vertical" style="display: none; position: relative; padding-left: 24px; margin-top: 32px; max-width: 320px; margin-left: auto; margin-right: auto;">
+
+    <!-- Vertical line -->
+    <div style="position: absolute; left: 4px; top: 8px; bottom: 8px; width: 2px; background: rgba(255,85,0,0.25);"></div>
+
+    <!-- MVP -->
+    <div style="position: relative; margin-bottom: 36px;">
+      <div style="position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange);"></div>
+      <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">MVP · Q1 2025</p>
+      <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Foundation</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Templates</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Structured Inputs</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Test Audio + LLM</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Core Actions</li>
+      </ul>
+    </div>
+
+    <!-- V1 -->
+    <div style="position: relative; margin-bottom: 36px;">
+      <div style="position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange);"></div>
+      <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">V1 · Late Q2 2025</p>
+      <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Knowledge & Testing</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>RAG / Knowledge Base</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Test Cases + Simulations</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Expanded Actions</li>
+      </ul>
+    </div>
+
+    <!-- V1.5 -->
+    <div style="position: relative; margin-bottom: 36px;">
+      <div style="position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange);"></div>
+      <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">V1.5 · Late Q2 2025</p>
+      <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Analysis</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Post-Call Analysis</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Collected Variables</li>
+      </ul>
+    </div>
+
+    <!-- V2 -->
+    <div style="position: relative; margin-bottom: 36px;">
+      <div style="position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange);"></div>
+      <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">V2 · Q3–4 2025</p>
+      <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Advanced Control</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Conversation Flows</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>SMS AI Agents</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Start from Scratch</li>
+      </ul>
+    </div>
+
+    <!-- Q1 2026 -->
+    <div style="position: relative;">
+      <div style="position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange);"></div>
+      <p style="font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Q1 2026</p>
+      <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Platform Maturity</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Agent Drafts + Variants</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>AI Agent Versions</li>
+        <li style="font-size: 0.8rem; color: var(--muted); padding-left: 10px; position: relative;"><span style="position:absolute;left:0;color:rgba(255,85,0,0.4);">—</span>Global Nodes + Actions</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="section" style="padding-top: 40px; padding-bottom: 0;">
+    <div class="section-label"></div>
+    <div class="section-content">
+      <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 32px;">Together these features mark a shift from "build your first agent" to "manage a fleet of agents" — which is exactly where our most mature customers needed the product to go.</p>
+      <div class="tradeoff-box">
+        <h4>Beyond the Product</h4>
+        <p>I documented the Agent Builder's patterns into a reusable component library — giving the team a foundation for how AI surfaces are designed across the product.</p>
+      </div>
+    </div>
+  </div>
+
+<div style="padding: 40px 60px 0 60px;">
+  <div style="margin-bottom: 20px;">
+    <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Multi State Agent Workflow — Q2 2026</p>
+    <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.7;">Use the prototype below, <a href="https://www.figma.com/proto/Fw1nj7WnmxAWIsGtVebNSw/Regal.ai---AI-Agent-Builder-Case-Study?node-id=115-67934&viewport=-1494%2C-2373%2C0.15&t=z66hHXemuz2NN8V0-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=115%3A67934&show-proto-sidebar=1&page-id=0%3A1" target="_blank" style="color: var(--orange); text-decoration: underline; text-underline-offset: 3px;">or view it in Figma</a>, to walk through a more complex end-to-end flow — exploring the broader platform experience including Conversation Flows, multi-state agents, and Agent Variants for iterative experimentation.</p>
+  </div>
+  <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--rule);">
+    <iframe style="border: none; display: block;" width="100%" height="600" src="https://embed.figma.com/proto/Fw1nj7WnmxAWIsGtVebNSw/Regal.ai---AI-Agent-Builder-Case-Study?node-id=115-67934&viewport=-1494%2C-2373%2C0.15&scaling=scale-down&content-scaling=fixed&starting-point-node-id=115%3A67934&show-proto-sidebar=1&page-id=0%3A1&embed-host=share" allowfullscreen></iframe>
+  </div>
+</div>
+
+</section>
+
+<!-- SCROLLYTELLING V2 — inside Roadmap Influence -->
+<div id="scrolly-v2" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 60px; position: relative;">
+  <div id="scrolly-v2-text" style="position: relative;">
+    <div class="scrolly-v2-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Simulations</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Ready for the Real World?</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Stress test how AI Agents handle nuanced and real-world scenarios by simulating full customer conversations against a set of predefined test cases. By representing expected and edge case interactions, the testing suite builds confidence in agent behavior before deployment.</p>
+      </div>
+    </div>
+    <div class="scrolly-v2-step" data-index="1" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Knowledge Base</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Grounding Agents with Context</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Connect documentation like FAQs, pricing, policies, and product information directly into the agent experience by creating a knowledge base in a dedicated workflow separate from the prompting logic. Separating knowledge management from prompting makes agents easier to maintain as documentation evolves.</p>
+      </div>
+    </div>
+    <div class="scrolly-v2-step" data-index="2" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Conversation Flows</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Scaling Beyond Linear Conversations</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Conversation Flows introduced multi-state logic that allowed users to design branching conversational paths based on customer intent, enabling AI agents to support more operationally sophisticated workflows.</p>
+      </div>
+    </div>
+    <div class="scrolly-v2-step" data-index="3" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Agent Variants</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Designing for Continuous Optimization</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Run multiple agent variants simultaneously and compare performance across prompts, tone, and strategies. Variants enables iterative experimentation driven by real production outcomes.</p>
+      </div>
+    </div>
+  </div>
+  <div id="scrolly-v2-sticky" style="position: sticky; top: 80px; height: calc(100vh - 160px); display: flex; align-items: center; align-self: start;">
+    <div style="position: relative; width: 100%;">
+      <img id="scrolly-v2-img-0" src="images/simulations.png" alt="Simulations" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 0.4s ease;" />
+      <img id="scrolly-v2-img-1" src="images/knowledge-base.png" alt="Knowledge Base" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-v2-img-2" src="images/conversation-flow.png" alt="Conversation Flows" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-v2-img-3" src="images/variants.png" alt="Agent Variants" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img src="images/simulations.png" style="width: 100%; border-radius: 8px; display: block; visibility: hidden;" />
+    </div>
+  </div>
+</div>
+
+<!-- SCROLLYTELLING V2 MOBILE -->
+<div id="scrolly-v2-mobile" style="display: none; flex-direction: column; gap: 60px; padding: 60px 24px;">
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Simulations</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Ready for the Real World?</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Stress test how AI Agents handle nuanced and real-world scenarios by simulating full customer conversations against a set of predefined test cases. By representing expected and edge case interactions, the testing suite builds confidence in agent behavior before deployment.</p>
+    <img src="images/simulations.png" alt="Simulations" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Knowledge Base</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Grounding Agents with Context</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Connect documentation like FAQs, pricing, policies, and product information directly into the agent experience by creating a knowledge base in a dedicated workflow separate from the prompting logic. Separating knowledge management from prompting makes agents easier to maintain as documentation evolves.</p>
+    <img src="images/knowledge-base.png" alt="Knowledge Base" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Conversation Flows</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Scaling Beyond Linear Conversations</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Conversation Flows introduced multi-state logic that allowed users to design branching conversational paths based on customer intent, enabling AI agents to support more operationally sophisticated workflows.</p>
+    <img src="images/conversation-flow.png" alt="Conversation Flows" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Agent Variants</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Designing for Continuous Optimization</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Run multiple agent variants simultaneously and compare performance across prompts, tone, and strategies. Variants enables iterative experimentation driven by real production outcomes.</p>
+    <img src="images/variants.png" alt="Agent Variants" style="width: 100%; border-radius: 8px;" />
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 2026 UPDATE -->
+<div class="metrics-bar" style="background: #f5f0e8;">
+  <div class="metrics-inner">
+    <p class="metrics-label" style="color: var(--muted);">Update — Q1 2026</p>
+    <h2 style="color: var(--black); font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; margin-bottom: 24px;">Built to Last</h2>
+    <p style="color: var(--muted); max-width: 680px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.7;">As the product matured, the MVP design choices became the foundation that made more advanced features approachable. The early decisions created room for the complexity of the platform it is today.</p>
+    <p style="color: var(--muted); max-width: 680px; margin-bottom: 48px; font-size: 0.95rem; line-height: 1.7;">The platform has grown from a handful of early adopters to one handling millions of customer interactions every month.</p>
+
+    <div class="metrics-grid">
+      <div class="metric">
+        <h3 style="color: var(--black);">43</h3>
+        <p style="color: var(--muted);">Paying AI Agent brands<br><span style="color: var(--accent); font-size: 0.8rem;">↑ from 8 at launch</span></p>
+      </div>
+      <div class="metric">
+        <h3 style="color: var(--black);">610</h3>
+        <p style="color: var(--muted);">Live AI Agents deployed<br><span style="color: var(--accent); font-size: 0.8rem;">↑ from 31 at launch</span></p>
+      </div>
+      <div class="metric">
+        <h3 style="color: var(--black);">3.1 Million</h3>
+        <p style="color: var(--muted);">Avg monthly tasks completed<br><span style="color: var(--accent); font-size: 0.8rem;">↑ from 422k at launch</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <div class="footer-left">Grace Lee &nbsp;·&nbsp; Principal Product Designer</div>
+  <div class="footer-right">2026</div>
+</footer>
+
+<script>
+  const steps = document.querySelectorAll('#scrolly-text .scrolly-step');
+  const imgs = [
+    document.getElementById('scrolly-img-0'),
+    document.getElementById('scrolly-img-1'),
+    document.getElementById('scrolly-img-2'),
+    document.getElementById('scrolly-img-3'),
+    document.getElementById('scrolly-img-4'),
+    document.getElementById('scrolly-img-5'),
+    document.getElementById('scrolly-img-6'),
+  ];
+
+  function updateScrolly() {
+    let active = 0;
+    steps.forEach((step) => {
+      const rect = step.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.55) {
+        active = parseInt(step.dataset.index);
+      }
+    });
+    imgs.forEach((img, i) => {
+      if (img) img.style.opacity = i === active ? '1' : '0';
+    });
+  }
+
+  // SCROLLYTELLING V2
+  const stepsV2 = document.querySelectorAll('#scrolly-v2-text .scrolly-v2-step');
+  const imgsV2 = [
+    document.getElementById('scrolly-v2-img-0'),
+    document.getElementById('scrolly-v2-img-1'),
+    document.getElementById('scrolly-v2-img-2'),
+    document.getElementById('scrolly-v2-img-3'),
+  ];
+
+  function updateScrollyV2() {
+    let active = 0;
+    stepsV2.forEach((step) => {
+      const rect = step.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.55) {
+        active = parseInt(step.dataset.index);
+      }
+    });
+    imgsV2.forEach((img, i) => {
+      if (img) img.style.opacity = i === active ? '1' : '0';
+    });
+  }
+
+  window.addEventListener('scroll', () => { updateScrolly(); updateScrollyV2(); }, { passive: true });
+  updateScrolly();
+  updateScrollyV2();
+
+  // Mobile toggle for V2
+  function checkMobileV2() {
+    const isMobile = window.innerWidth <= 1100;
+    document.getElementById('scrolly-v2').style.display = isMobile ? 'none' : 'grid';
+    document.getElementById('scrolly-v2-mobile').style.display = isMobile ? 'flex' : 'none';
+  }
+  checkMobileV2();
+</script>
+
+</body>
+</html>

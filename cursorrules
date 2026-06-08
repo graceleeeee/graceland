@@ -1,0 +1,225 @@
+# Grace Lee Portfolio — Cursor Rules
+# Drop this file at portfolio/.cursorrules
+
+## Stack
+Static HTML/CSS/JS. No frameworks. No build step. All files live flat in portfolio/.
+Images: portfolio/images/  — always src="images/filename.ext"
+Files:  portfolio/files/   — always href="files/filename.pdf"
+Fonts: Instrument Serif + DM Sans from Google Fonts (always include the <link> in <head>)
+
+---
+
+## Design Tokens — always use these, never hardcode colors
+
+--cream: #fdf9f5
+--orange: #FF5500
+--orange-light: #fff3e8
+--text: #0a0a3a
+--muted: #555  (case study pages) / #888 (homepage only)
+--rule: rgba(255,85,0,0.15)
+--black: #0a0a3a
+--off-white: #fdf9f5
+--accent: #FF5500  (alias of --orange)
+--white: #ffffff
+
+---
+
+## Every page must have
+
+1. Google Fonts <link> in <head>
+2. Standard <nav> (see template below)
+3. Standard <footer> (see template below)
+4. Grid paper background (body::before) — EXCEPT homepage index.html which manages its own
+
+Exception: index.html has nav { display: none } — the homepage has no nav.
+
+### Nav template
+```html
+<nav>
+  <a href="index.html" class="nav-name">Grace Lee</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+```
+Nav is sticky, top: 0, z-index: 100, cream background, 18px 60px padding, orange bottom border at 0.2 opacity.
+
+### Footer template
+```html
+<footer>
+  <div class="footer-left">Grace Lee &nbsp;·&nbsp; Principal Product Designer</div>
+  <div class="footer-right">2026</div>
+</footer>
+```
+Footer has orange top border at 0.2 opacity, 10px 32px padding, cream background.
+
+---
+
+## Case Study Page Layout
+
+All case study sections use a two-column grid: 420px label | 1fr content.
+
+```css
+.section { padding: 80px 60px; display: grid; grid-template-columns: 420px 1fr; gap: 60px; }
+.section-label { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); padding-top: 6px; }
+.section-content h2 { font-family: 'Instrument Serif', serif; font-size: 1.9rem; font-weight: 400; color: var(--black); margin-bottom: 20px; }
+```
+
+Hero uses the same grid with padding: 100px 60px 80px and h1 at clamp(2.8rem, 5vw, 4.2rem).
+
+Divider between sections: <div class="divider"></div>
+```css
+.divider { height: 1px; background: var(--rule); margin: 0 60px; }
+```
+
+Image break: <div class="img-break"><img src="images/x.png" /></div>
+```css
+.img-break { padding: 0 60px; }
+.img-break img { width: 100%; display: block; border-radius: 8px; }
+```
+
+---
+
+## Shared Components
+
+### Takeaway box — always class="tradeoff-box", always inside .section-content
+```html
+<div class="tradeoff-box">
+  <h4>Takeaway</h4>
+  <p>Summary text.</p>
+</div>
+```
+bg: #f5f3ef, border: 1px solid var(--rule), padding: 36px
+
+### Inline quote box — user research quotes inside a section
+```html
+<blockquote style="margin-top:32px;padding:28px 32px;background:white;border-left:3px solid var(--orange);border-radius:0;">
+  <p style="font-family:'Instrument Serif',serif;font-size:1.15rem;color:var(--black);line-height:1.5;margin-bottom:12px;">"Quote text."</p>
+  <cite style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);font-style:normal;">Attribution</cite>
+</blockquote>
+```
+
+### Pull quote — full-bleed orange block, breaks page rhythm
+```html
+<div class="pull-quote">
+  <blockquote>"Quote text."<cite>Attribution</cite></blockquote>
+</div>
+```
+bg: #FF5500, padding: 56px 60px. Text is white Instrument Serif italic, clamp(1.4rem, 2.5vw, 2rem).
+
+### Three-column grid (pillars/insights)
+```html
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:32px;">
+  <div style="background:var(--off-white);padding:32px 28px;">
+    <p style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;">Category</p>
+    <p style="font-weight:500;color:var(--black);margin-bottom:10px;font-size:0.95rem;">Title</p>
+    <p style="font-size:0.88rem;color:var(--muted);line-height:1.6;">Body copy.</p>
+  </div>
+  <!-- repeat × 3 -->
+</div>
+```
+
+### Scrollytelling — sticky image right, scrolling text left
+Desktop: grid 420px | 1fr, left col has .SECTION-step divs (min-height:100vh), right col is position:sticky top:80px with absolutely stacked images toggled by opacity via IntersectionObserver scroll listener.
+Mobile: flat stacked text+image pairs, display:none on desktop, display:flex on mobile.
+Breakpoint to toggle: 860px.
+JS: scroll listener checks rect.top < window.innerHeight * 0.55 to set active step index, then sets opacity 1/0 on images.
+
+---
+
+## Responsive Breakpoints — Case Study Pages
+
+Two breakpoints only. Never add a third.
+
+```css
+/* Medium — shrink label column */
+@media (max-width: 1200px) and (min-width: 861px) {
+  .section, .hero { grid-template-columns: 200px 1fr; }
+  .section-label { font-size: 0.65rem; }
+}
+
+/* Mobile — full stack */
+@media (max-width: 860px) {
+  nav { padding: 20px 24px; }
+  .hero, .section { padding: 60px 24px; grid-template-columns: 1fr; gap: 32px; }
+  .divider { margin: 0 24px; }
+  .img-break { padding: 0 24px; }
+  .metrics-inner { padding: 0 24px; }
+  .metrics-grid { grid-template-columns: 1fr; gap: 32px; }
+  .solution-grid, .insights-grid { grid-template-columns: 1fr !important; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+  .pull-quote { padding: 40px 24px; }
+}
+```
+
+---
+
+## Homepage (index.html) — Special Rules
+
+The homepage is a draggable desktop UI. It has completely different rules from all other pages.
+
+### Two-world model
+Desktop (>768px): `.canvas` is visible, `.mobile-view` is hidden. Everything is position:absolute.
+Mobile (≤768px): `.canvas` is hidden, `.mobile-view` is visible. Normal document flow.
+These two worlds are fully independent. Never try to make them share layout.
+
+### Position system — NEVER break these rules
+- initPositions(), applyPositions(), updateFractions() must ALWAYS be globally scoped — never inside the if (window.innerWidth > 768) block
+- initPositions() runs on load before anything else touches elements
+- NEVER add a second window.addEventListener('resize', ...) — use the existing one
+- wasDesktop flag must be set on window load, not at script parse time
+- Inline style="top:Xpx; left:Ypx" on .retro-window and .pixel-object elements are converted to viewport fractions automatically — no extra steps needed when repositioning
+
+### Adding a new desktop card
+Give it: id, class="retro-window card-window", inline style with top/left px, transform:rotate(Xdeg)
+It gets picked up by makeDraggable automatically — no JS changes needed.
+
+```html
+<a href="page.html" class="retro-window card-window" id="win-NEW" style="top:400px;left:500px;z-index:8;transform:rotate(1deg);text-decoration:none;color:inherit;">
+  <div class="window-titlebar">
+    <span class="window-title">case-study &nbsp;·&nbsp; 2025</span>
+    <span class="window-close">×</span>
+  </div>
+  <div class="card-image-area">
+    <img src="images/your-image.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+    <div class="card-hover-reveal">
+      <div>
+        <div class="card-hover-label">Tag · Tag · Tag</div>
+        <div class="card-hover-name">Company</div>
+        <div class="card-hover-type">Year</div>
+        <div class="card-hover-title">Project Title</div>
+      </div>
+      <div class="card-hover-footer">
+        <span></span><span class="card-hover-arrow">→</span>
+      </div>
+    </div>
+    <span class="card-pill">Read Case Study</span>
+  </div>
+</a>
+```
+
+### Adding a new mobile carousel card
+Add inside .carousel-track in the mobile-view section. Order = left-to-right display order.
+
+```html
+<a href="page.html" class="mobile-card">
+  <div class="window-titlebar"><span class="window-title">case-study</span><span class="window-close">×</span></div>
+  <div class="mobile-card-image"><img src="images/your-image.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+  <div class="mobile-card-body">
+    <div class="mobile-card-name">Project Title</div>
+    <div class="mobile-card-type">Type · Company</div>
+    <span class="mobile-card-arrow">→</span>
+  </div>
+</a>
+```
+
+No JS changes needed. When you add a card, add it in BOTH places — desktop canvas AND mobile carousel.
+
+### Homepage never-do list
+- Never add a second resize event listener
+- Never move initPositions/applyPositions/updateFractions inside the mobile JS guard
+- Never use position:fixed on canvas cards
+- Never try to stack desktop cards vertically on mobile — use the separate mobile-card instead
+- Never remove the !important flags from the 768px media query
+- Never target .card-window in CSS without checking it won't affect .mobile-card

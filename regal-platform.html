@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regal Platform — Grace Lee</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf9f5;
+    --orange: #FF5500;
+    --orange-light: #fff3e8;
+    --text: #0a0a3a;
+    --muted: #555;
+    --rule: rgba(255,85,0,0.15);
+    --black: #0a0a3a;
+    --off-white: #fdf9f5;
+    --accent: #FF5500;
+    --accent-light: #fff3e8;
+    --warm-gray: #aaa;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 60px;
+    border-bottom: 1px solid rgba(255,85,0,0.2);
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 100;
+  }
+  .nav-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+  .nav-name-text {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+    color: var(--orange);
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    padding: 100px 60px 80px;
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1;
+    color: var(--black);
+    font-weight: 400;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .meta-item label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .meta-item p {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .tag {
+    background: var(--orange);
+    color: white;
+    padding: 5px 14px;
+    border-radius: 99px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--rule);
+    margin: 0 60px;
+  }
+
+  /* IMAGE BREAK */
+  .img-break {
+    padding: 0 60px;
+  }
+  .img-break img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin: 0 auto;
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 60px;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 6px;
+    line-height: 1.4;
+  }
+  .section-content h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--black);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .section-content p {
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .section-content p:last-child { margin-bottom: 0; }
+
+  /* TAKEAWAY BOX */
+  .tradeoff-box {
+    background: #f5f3ef;
+    border: 1px solid var(--rule);
+    padding: 36px;
+  }
+  .tradeoff-box h4 {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .tradeoff-box p {
+    font-size: 0.92rem;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* METRICS BAR */
+  .metrics-bar {
+    padding: 64px 0;
+  }
+  .metrics-inner {
+    padding: 0 60px;
+  }
+  .metrics-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .metric h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #fdf9f5;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .metric p {
+    font-size: 0.88rem;
+    color: #7a7670;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,85,0,0.2);
+    padding: 10px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--cream);
+  }
+  .footer-left {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-right {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @media (max-width: 860px) {
+    nav { padding: 20px 24px; }
+    .hero, .section { padding: 60px 24px; grid-template-columns: 1fr; gap: 32px; }
+    .divider { margin: 0 24px; }
+    .img-break { padding: 0 24px; }
+    .metrics-inner { padding: 0 24px; }
+    .metrics-grid { grid-template-columns: 1fr; gap: 32px; }
+    .solution-grid { grid-template-columns: 1fr !important; }
+    footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+  }
+
+  @media (max-width: 1200px) and (min-width: 861px) {
+    .section { grid-template-columns: 200px 1fr; }
+    .hero { grid-template-columns: 200px 1fr; }
+    .section-label { font-size: 0.65rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">
+    <span class="nav-name-text">Grace Lee</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>Regal Platform</h1>
+    <p style="margin-top: 16px; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);">Designing the Core Regal Experience 0 ➡ 1</p>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <label>Overview</label>
+      <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Regal is a dynamic contact center platform with a full suite of contact center tools that improves efficiency and drive better customer outcomes for our users.</p>
+    </div>
+    <div class="meta-item">
+      <label>Role</label>
+      <p>Founding Product Designer</p>
+      <p style="margin-top: 10px; font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Owned end-to-end design across Regal's core platform - from discovery through execution - over many product lifecycles spanning a couple years.</p>
+    </div>
+    <div class="meta-item">
+      <label>Scope</label>
+      <div class="tag-row">
+        <span class="tag">0 → 1</span>
+        <span class="tag">User Research</span>
+        <span class="tag">UI/UX Design</span>
+      </div>
+    </div>
+    <div class="meta-item">
+      <label>Timeline</label>
+      <p>2022–2024</p>
+    </div>
+    <div class="meta-item">
+      <label>Outcome</label>
+      <p>547% ROI · 10M+ conversations/mo</p>
+    </div>
+  </div>
+</section>
+
+<div class="img-break" style="padding-bottom: 80px;">
+  <img src="images/rp-intro.gif" alt="Regal Platform interface" />
+</div>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="section-label">The Problem</div>
+  <div class="section-content">
+    <h2>Powerful, but Not Built for Scale.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">How to make Regal's platform more flexible and self-serve?</p>
+    <p>As Regal started serving more users, there was a clear signal that while the early state of Regal was powerful, it was not robust or flexible enough to accommodate the unique needs of our users:</p>
+
+    <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 32px;">
+
+      <div>
+        <p style="font-weight: 500; color: var(--black); margin-bottom: 10px;">Sales Agents</p>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">The current state (built on a third-party platform) had limited functionality so it was best suited for agents working for businesses with shorter sales cycles and high volume of leads.</p>
+        <img src="images/old-ad.png" alt="Old Agent Desktop" style="width: 100%; margin-top: 20px; border-radius: 8px;" />
+      </div>
+
+      <div>
+        <p style="font-weight: 500; color: var(--black); margin-bottom: 10px;">Sales Leaders</p>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">The configuration of Regal's core features — data-driven automation, journey management, key CCaaS capabilities — were not exposed for self-service and fell entirely on Regal's CS team.</p>
+      </div>
+
+    </div>
+
+    <div class="tradeoff-box" style="margin-top: 28px;">
+      <h4>Takeaway</h4>
+      <p>To scale, Regal needed to evolve the Agent Desktop into a flexible tool that accommodates different agent workflows — and give leaders a self-serve platform to configure and manage on their own.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section class="section">
+  <div class="section-label">The Solution</div>
+  <div class="section-content">
+    <h2>A Complete Suite, Built for Scale.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Pioneering a high-touch, data-driven approach to CCaaS.</p>
+    <p>Regal's vision was to pioneer a new "high-touch", data-driven, and cost-effective approach to CCaaS. To realize that goal, the platform needed to evolve — introducing self-serve capabilities, a unified customer view, and an improved agent experience built for flexibility and efficiency.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 32px;">
+
+      <div style="background: var(--off-white); padding: 32px 28px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;">For Agents</p>
+        <p style="font-weight: 500; color: var(--black); margin-bottom: 10px; font-size: 0.95rem;">Effective Agent Tooling</p>
+        <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Flexible workstation with omni-channel capabilities — calls, SMS, and email in one place.</p>
+      </div>
+
+      <div style="background: var(--off-white); padding: 32px 28px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;">For Managers</p>
+        <p style="font-weight: 500; color: var(--black); margin-bottom: 10px; font-size: 0.95rem;">Effective Manager Tooling</p>
+        <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Self-serve automation and orchestration — no reliance on Regal's team to manage workflows.</p>
+      </div>
+
+      <div style="background: var(--off-white); padding: 32px 28px;">
+        <p style="font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;">For the Platform</p>
+        <p style="font-weight: 500; color: var(--black); margin-bottom: 10px; font-size: 0.95rem;">Customer Data Ingestion</p>
+        <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.6;">A source of truth that powers data-driven decisions and surfaces the right context at the right time.</p>
+      </div>
+
+    </div>
+
+    <div class="tradeoff-box" style="margin-top: 28px;">
+      <h4>Takeaway</h4>
+      <p>These table stakes laid the groundwork for Regal to reimagine the sales cycle — empowering brands to engage customers with precision, consistency, and a human touch at every stage.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section class="section">
+  <div class="section-label">Research</div>
+  <div class="section-content">
+    <h2>Know Thy Users.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Shadowing Agents and User Interviews with Sales Leaders</p>
+    <p>To inform overall product decisions, I conducted shadowing and interview sessions to develop personas that shaped how we approached each body of work.</p>
+  </div>
+</section>
+
+<!-- PERSONA CAROUSEL -->
+<div style="padding: 0 60px 80px;">
+
+  <div style="position: relative; overflow: hidden;">
+    <div id="persona-track" style="display: flex; transition: transform 0.4s ease;">
+      <div style="min-width: 100%;"><img src="images/vicky-volume.png" alt="Vicky Volume — Sales Associate" style="width: 100%; border-radius: 8px; display: block;" /></div>
+      <div style="min-width: 100%;"><img src="images/ollie-owner.png" alt="Ollie Owner — Sales Associate" style="width: 100%; border-radius: 8px; display: block;" /></div>
+      <div style="min-width: 100%;"><img src="images/sales-leader.png" alt="Matthew Motivator — Sales Leader" style="width: 100%; border-radius: 8px; display: block;" /></div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+    <div>
+      <div id="persona-label" style="font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px;"></div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button onclick="shiftPersona(-1)" style="background: none; border: 1px solid rgba(255,85,0,0.3); color: var(--orange); width: 40px; height: 40px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">←</button>
+      <span id="persona-counter" style="font-size: 0.75rem; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap;"></span>
+      <button onclick="shiftPersona(1)" style="background: none; border: 1px solid rgba(255,85,0,0.3); color: var(--orange); width: 40px; height: 40px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">→</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const personaLabels = ['Vicky Volume — Sales Associate', 'Ollie Owner — Sales Associate', 'Matthew Motivator — Senior VP of Growth & Sales'];
+  let personaIndex = 0;
+  const personaTotal = 3;
+
+  function shiftPersona(dir) {
+    personaIndex = (personaIndex + dir + personaTotal) % personaTotal;
+    document.getElementById('persona-track').style.transform = `translateX(-${personaIndex * 100}%)`;
+    document.getElementById('persona-counter').textContent = `${personaIndex + 1} of ${personaTotal}`;
+    document.getElementById('persona-label').textContent = personaLabels[personaIndex];
+  }
+
+  document.getElementById('persona-counter').textContent = `1 of ${personaTotal}`;
+  document.getElementById('persona-label').textContent = personaLabels[0];
+</script>
+
+<div class="divider"></div>
+
+<!-- DESIGN INTRO -->
+<section class="section">
+  <div class="section-label">Design</div>
+  <div class="section-content">
+    <h2>Three Areas, One Platform.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Agent Desktop · Journey Builder · Custom Objects</p>
+    <p>Over the span of a few years, the Regal team iteratively worked towards bringing the product vision to life. This case study highlights a few of Regal's table stake features:</p>
+
+    <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 28px;">
+      <div style="display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: start;">
+        <p style="font-weight: 500; color: var(--black); font-size: 0.95rem;">Agent Desktop</p>
+        <p style="color: var(--muted); font-size: 0.92rem;">Improved workflows for agents</p>
+      </div>
+      <div style="height: 1px; background: var(--rule);"></div>
+      <div style="display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: start;">
+        <p style="font-weight: 500; color: var(--black); font-size: 0.95rem;">Journey Builder</p>
+        <p style="color: var(--muted); font-size: 0.92rem;">Automation tool that bridges marketing & sales</p>
+      </div>
+      <div style="height: 1px; background: var(--rule);"></div>
+      <div style="display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: start;">
+        <p style="font-weight: 500; color: var(--black); font-size: 0.95rem;">Custom Objects</p>
+        <p style="color: var(--muted); font-size: 0.92rem;">Extend data models that power automation and enhance agent workflows</p>
+      </div>
+    </div>
+
+    <div class="tradeoff-box" style="margin-top: 32px;">
+      <h4>Takeaway</h4>
+      <p>Each table stake was designed and built to empower our users to reach their revenue goals effectively and efficiently.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DESIGN 01 -->
+<section class="section">
+  <div class="section-label">Design 01 — Agent Desktop</div>
+  <div class="section-content">
+    <h2>A Workstation Built for Real Agents.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Rebuilding the core agent experience from the ground up.</p>
+    <p>Agent Desktop is the interface where agents interact with leads and manage their tasks. It provides a 360° view of every customer — consolidating every interaction and contact attributes into a unified customer profile — so agents are equipped to personalize conversations and efficiently execute tasks.</p>
+
+    <blockquote style="margin-top: 32px; padding: 28px 32px; background: white; border-left: 3px solid var(--orange); border-radius: 0;">
+      <p style="font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--black); line-height: 1.5; margin-bottom: 12px;">"I need everything in one place — my leads, my emails, my tasks. Jumping between tools kills my momentum."</p>
+      <cite style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-style: normal;">Sales Agent, Discovery Research</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- AGENT DESKTOP SCROLLYTELLING — desktop -->
+<div id="ad-scrolly" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 60px 60px 0; position: relative;">
+  <div id="ad-scrolly-text" style="position: relative;">
+
+    <div class="ad-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Facelift</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">A Cohesive, Branded Experience</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">We stripped out the underlying third-party functionality and UI to create a cohesive, branded experience that optimizes for efficient agent workflows.</p>
+      </div>
+    </div>
+
+    <div class="ad-step" data-index="1" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Omni-Channel Feed</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">One Feed, Full Visibility</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">A single unified feed gives agents full visibility into every call, text, and email with each customer — no more tab-switching, no missing context.</p>
+      </div>
+    </div>
+
+    <div class="ad-step" data-index="2" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Customer Profile</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Context at a Glance</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Customer properties organized into a unified profile — giving agents rich context at their fingertips to personalize every interaction without ever leaving the desktop.</p>
+      </div>
+    </div>
+
+    <div class="ad-step" data-index="3" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Contact Lists</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Own Your Book of Business</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Organizes the contacts owned by each agent for easy tracking and management — built for Ollie Owner agents who run longer sales cycles and need to own their pipeline.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="ad-scrolly-sticky" style="position: sticky; top: 80px; height: calc(100vh - 160px); display: flex; align-items: center; align-self: start;">
+    <div style="position: relative; width: 100%;">
+      <img id="ad-img-0" src="images/ad-1.png" alt="Agent Desktop Facelift" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 0.4s ease;" />
+      <img id="ad-img-1" src="images/ad-2.png" alt="Omni-Channel Feed" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="ad-img-2" src="images/ad-3.png" alt="Customer Profile" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="ad-img-3" src="images/ad-4.png" alt="Contact Lists" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img src="images/ad-1.png" style="width: 100%; border-radius: 8px; display: block; visibility: hidden;" />
+    </div>
+  </div>
+</div>
+
+<!-- AGENT DESKTOP SCROLLYTELLING — mobile -->
+<div id="ad-scrolly-mobile" style="display: none; flex-direction: column; gap: 60px; padding: 60px 24px;">
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Facelift</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">A Cohesive, Branded Experience</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">We stripped out the underlying third-party functionality and UI to create a cohesive, branded experience that optimizes for efficient agent workflows.</p>
+    <img src="images/ad-1.png" alt="Agent Desktop Facelift" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Omni-Channel Feed</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">One Feed, Full Visibility</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">A single unified feed gives agents full visibility into every call, text, and email with each customer — no more tab-switching, no missing context.</p>
+    <img src="images/ad-2.png" alt="Omni-Channel Feed" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Customer Profile</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Context at a Glance</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Customer properties organized into a unified profile — giving agents rich context at their fingertips to personalize every interaction without ever leaving the desktop.</p>
+    <img src="images/ad-3.png" alt="Customer Profile" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Contact Lists</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Own Your Book of Business</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Organizes the contacts owned by each agent for easy tracking and management — built for Ollie Owner agents who run longer sales cycles and need to own their pipeline.</p>
+    <img src="images/ad-4.png" alt="Contact Lists" style="width: 100%; border-radius: 8px;" />
+  </div>
+</div>
+
+<script>
+  const adSteps = document.querySelectorAll('.ad-step');
+  const adImgs = [
+    document.getElementById('ad-img-0'),
+    document.getElementById('ad-img-1'),
+    document.getElementById('ad-img-2'),
+    document.getElementById('ad-img-3'),
+  ];
+
+  function updateAdScrolly() {
+    let active = 0;
+    adSteps.forEach((step) => {
+      const rect = step.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.55) {
+        active = parseInt(step.dataset.index);
+      }
+    });
+    adImgs.forEach((img, i) => {
+      if (img) img.style.opacity = i === active ? '1' : '0';
+    });
+  }
+
+  window.addEventListener('scroll', updateAdScrolly, { passive: true });
+  updateAdScrolly();
+
+  function checkAdMobile() {
+    const isMobile = window.innerWidth <= 1100;
+    document.getElementById('ad-scrolly').style.display = isMobile ? 'none' : 'grid';
+    document.getElementById('ad-scrolly-mobile').style.display = isMobile ? 'flex' : 'none';
+  }
+  checkAdMobile();
+  window.addEventListener('resize', checkAdMobile);
+</script>
+
+<div class="divider"></div>
+
+<!-- DESIGN 02 -->
+<section class="section">
+  <div class="section-label">Design 02 — Journey Builder</div>
+  <div class="section-content">
+    <h2>Automating The Right Message at the Right Time.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Automating Orchestration for Managers</p>
+    <p>Journey Builder automates customer interactions by orchestrating personalized, cross-channel communication journeys. Using triggers based on real time customer behavior, it sends targeted messages via phone, SMS, or email — automatically at the right moment — guiding customers through tailored experiences that drive engagement and conversion. Journey ensures timely, relevant outreach from initial contact to long-term retention.</p>
+
+    <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+      <img src="images/j-4.png" alt="Automated Outreach" style="width: 50%; border-radius: 8px; display: inline-block;" />
+    </div>
+
+    <blockquote style="margin-top: 0; padding: 28px 32px; background: white; border-left: 3px solid var(--orange); border-radius: 0;">
+      <p style="font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--black); line-height: 1.5; margin-bottom: 12px;">"I need a way to automatically guide customers through their journey — sending relevant, personalized outreach without my team having to manage each step manually."</p>
+      <cite style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-style: normal;">Sales Leader, Discovery Research</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- JOURNEY BUILDER SCROLLYTELLING — desktop -->
+<div id="jb-scrolly" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 60px 60px 0; position: relative;">
+  <div id="jb-scrolly-text" style="position: relative;">
+
+    <div class="jb-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Self-Serve Builder</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Map Every Step, Visually</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Map out every step of a customer journey visually and precisely — no engineering required, no tickets to Regal's team.</p>
+      </div>
+    </div>
+
+    <div class="jb-step" data-index="1" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Journey Nodes</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Robust Building Blocks</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Drag-and-drop components that define the exact sequence of a customer journey — triggers, timing, conditions, and actions all in one canvas.</p>
+      </div>
+    </div>
+
+    <div class="jb-step" data-index="2" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Node Configuration</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Configure Every Step</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Fully customize each step of the journey with node-level configuration — set conditions, timing windows, and channel-specific logic without leaving the canvas.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="jb-scrolly-sticky" style="position: sticky; top: 80px; height: calc(100vh - 160px); display: flex; align-items: center; align-self: start;">
+    <div style="position: relative; width: 100%;">
+      <img id="jb-img-0" src="images/j-1.png" alt="Self-Serve Journey Builder" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 0.4s ease;" />
+      <img id="jb-img-1" src="images/j-2.png" alt="Journey Nodes" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="jb-img-2" src="images/j-3.png" alt="Node Configuration" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img src="images/j-1.png" style="width: 100%; border-radius: 8px; display: block; visibility: hidden;" />
+    </div>
+  </div>
+</div>
+
+<!-- JOURNEY BUILDER SCROLLYTELLING — mobile -->
+<div id="jb-scrolly-mobile" style="display: none; flex-direction: column; gap: 60px; padding: 60px 24px;">
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Self-Serve Builder</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Map Every Step, Visually</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Map out every step of a customer journey visually and precisely — no engineering required, no tickets to Regal's team.</p>
+    <img src="images/j-1.png" alt="Self-Serve Journey Builder" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Journey Nodes</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Robust Building Blocks</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Drag-and-drop components that define the exact sequence of a customer journey — triggers, timing, conditions, and actions all in one canvas.</p>
+    <img src="images/j-2.png" alt="Journey Nodes" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Node Configuration</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Configure Every Step</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Fully customize each step of the journey with node-level configuration — set conditions, timing windows, and channel-specific logic without leaving the canvas.</p>
+    <img src="images/j-3.png" alt="Node Configuration" style="width: 100%; border-radius: 8px;" />
+  </div>
+</div>
+
+<script>
+  const jbSteps = document.querySelectorAll('.jb-step');
+  const jbImgs = [
+    document.getElementById('jb-img-0'),
+    document.getElementById('jb-img-1'),
+    document.getElementById('jb-img-2'),
+    document.getElementById('jb-img-3'),
+  ];
+
+  function updateJbScrolly() {
+    let active = 0;
+    jbSteps.forEach((step) => {
+      const rect = step.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.55) {
+        active = parseInt(step.dataset.index);
+      }
+    });
+    jbImgs.forEach((img, i) => {
+      if (img) img.style.opacity = i === active ? '1' : '0';
+    });
+  }
+
+  window.addEventListener('scroll', updateJbScrolly, { passive: true });
+  updateJbScrolly();
+
+  function checkJbMobile() {
+    const isMobile = window.innerWidth <= 1100;
+    document.getElementById('jb-scrolly').style.display = isMobile ? 'none' : 'grid';
+    document.getElementById('jb-scrolly-mobile').style.display = isMobile ? 'flex' : 'none';
+  }
+  checkJbMobile();
+  window.addEventListener('resize', checkJbMobile);
+</script>
+
+<div class="divider"></div>
+
+<!-- DESIGN 03 -->
+<section class="section">
+  <div class="section-label">Design 03 — Custom Objects</div>
+  <div class="section-content">
+    <h2>CRM-Powered Context.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Complete Customer View via Data Integrations</p>
+    <p>Custom Objects are flexible data structures that allow businesses to store and manage information unique to their needs — beyond standard contacts or accounts. Surfaced directly on the Agent Desktop, they give agents a more complete view of the customer, and give managers deeper insights to optimize workflows, track key metrics, and make more strategic decisions.</p>
+
+    <blockquote style="margin-top: 32px; padding: 28px 32px; background: white; border-left: 3px solid var(--orange); border-radius: 0;">
+      <p style="font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--black); line-height: 1.5; margin-bottom: 12px;">"Our customer data sits in Salesforce — I need a seamless way to surface it in Regal so my team has what they need without switching between platforms."</p>
+      <cite style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-style: normal;">Sales Leader, Discovery Research</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- CUSTOM OBJECTS SCROLLYTELLING — desktop -->
+<div id="co-scrolly" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 60px 60px 0; position: relative;">
+  <div id="co-scrolly-text" style="position: relative;">
+
+    <div class="co-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Agent Desktop</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Full Context, No Tab-Switching</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Custom Objects surfaced in customer profile section alongside the omni-channel feed on the Agent Desktop — giving agents a complete view of the customer in one place.</p>
+      </div>
+    </div>
+
+    <div class="co-step" data-index="1" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Object Builder</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Build Custom Objects Within Regal</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Configure how Custom Objects are displayed on the Agent Desktop via an easy-to-use admin — define the structure, set visibility, and tailor what each team sees.</p>
+      </div>
+    </div>
+
+    <div class="co-step" data-index="2" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Attributes</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Organize Data Your Way</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Customize the way customer data is structured by mapping real-time event data and setting up unique identifiers and attributes.</p>
+      </div>
+    </div>
+
+    <div class="co-step" data-index="3" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Data Integration</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">A Living Source of Truth</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Event data flows in automatically to update and maintain all customer data — so agents are always working from the source of truth.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="co-scrolly-sticky" style="position: sticky; top: 80px; height: calc(100vh - 160px); display: flex; align-items: center; align-self: start;">
+    <div style="position: relative; width: 100%;">
+      <img id="co-img-0" src="images/co-1.png" alt="Custom Objects on Agent Desktop" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 0.4s ease;" />
+      <img id="co-img-1" src="images/co-2.png" alt="Build Custom Objects" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="co-img-2" src="images/co-3.png" alt="Object Attributes" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="co-img-3" src="images/co-4.png" alt="Data Integration" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img src="images/co-1.png" style="width: 100%; border-radius: 8px; display: block; visibility: hidden;" />
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM OBJECTS SCROLLYTELLING — mobile -->
+<div id="co-scrolly-mobile" style="display: none; flex-direction: column; gap: 60px; padding: 60px 24px;">
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Agent Desktop</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Full Context, No Tab-Switching</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Custom Objects surfaced in customer profile section alongside the omni-channel feed on the Agent Desktop — giving agents a complete view of the customer in one place.</p>
+    <img src="images/co-1.png" alt="Custom Objects on Agent Desktop" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Object Builder</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Build Custom Objects Within Regal</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Configure how Custom Objects are displayed on the Agent Desktop via an easy-to-use admin — define the structure, set visibility, and tailor what each team sees.</p>
+    <img src="images/co-2.png" alt="Build Custom Objects" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Attributes</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Organize Data Your Way</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Customize the way customer data is structured by mapping real-time event data and setting up unique identifiers and attributes.</p>
+    <img src="images/co-3.png" alt="Object Attributes" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Data Integration</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">A Living Source of Truth</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Event data flows in automatically to update and maintain all customer data — so agents are always working from the source of truth.</p>
+    <img src="images/co-4.png" alt="Data Integration" style="width: 100%; border-radius: 8px;" />
+  </div>
+</div>
+
+<script>
+  const coSteps = document.querySelectorAll('.co-step');
+  const coImgs = [
+    document.getElementById('co-img-0'),
+    document.getElementById('co-img-1'),
+    document.getElementById('co-img-2'),
+    document.getElementById('co-img-3'),
+  ];
+
+  function updateCoScrolly() {
+    let active = 0;
+    coSteps.forEach((step) => {
+      const rect = step.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.55) {
+        active = parseInt(step.dataset.index);
+      }
+    });
+    coImgs.forEach((img, i) => {
+      if (img) img.style.opacity = i === active ? '1' : '0';
+    });
+  }
+
+  window.addEventListener('scroll', updateCoScrolly, { passive: true });
+  updateCoScrolly();
+
+  function checkCoMobile() {
+    const isMobile = window.innerWidth <= 1100;
+    document.getElementById('co-scrolly').style.display = isMobile ? 'none' : 'grid';
+    document.getElementById('co-scrolly-mobile').style.display = isMobile ? 'flex' : 'none';
+  }
+  checkCoMobile();
+  window.addEventListener('resize', checkCoMobile);
+</script>
+
+<div class="divider"></div>
+
+<!-- OUTCOME -->
+<div class="metrics-bar" style="background: #1c1a17;">
+  <div class="metrics-inner">
+    <p class="metrics-label" style="color: var(--accent);">Outcome</p>
+    <h2 style="color: #fdf9f5; font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; margin-bottom: 8px;">Built to scale — and built to last.</h2>
+    <p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px;">From outbound dialer to full-suite, self-serve contact center platform.</p>
+    <p style="color: #b8b4aa; max-width: 680px; margin-bottom: 48px;">Over the course of several years, Regal evolved from a powerful but narrowly focused outbound dialer into a robust, flexible, and self-serve contact center platform. By introducing foundational features like an improved Agent Desktop, a self-serve Journey Builder, and Custom Objects, we enabled our users to work more efficiently, personalize interactions at scale, and manage their data in ways that matched their unique workflows — aligning Regal's product capabilities with its long-term vision of providing high-touch, data-driven customer experiences.</p>
+    <div class="metrics-grid">
+      <div class="metric">
+        <h3>10M+</h3>
+        <p>ROI-positive conversations per month</p>
+      </div>
+      <div class="metric">
+        <h3>547%</h3>
+        <p>ROI over 3 years for customers</p>
+      </div>
+      <div class="metric">
+        <h3>$19.1M</h3>
+        <p>In benefits vs. $3.5M in costs</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">Grace Lee &nbsp;·&nbsp; Principal Product Designer</div>
+  <div class="footer-right">2026</div>
+</footer>
+
+</body>
+</html>
