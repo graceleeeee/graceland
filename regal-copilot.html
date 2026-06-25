@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regal Copilot — Grace Lee</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+--cream: #fdf9f5;
+--orange: #FF5500;
+--orange-light: #fff3e8;
+--text: #0a0a3a;
+--muted: #555;
+--rule: rgba(255,85,0,0.15);
+--black: #0a0a3a;
+--off-white: #fdf9f5;
+--accent: #FF5500;
+--accent-light: #fff3e8;
+--warm-gray: #aaa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background: var(--cream);
+color: var(--text);
+font-family: 'DM Sans', sans-serif;
+font-weight: 300;
+line-height: 1.7;
+font-size: 17px;
+}
+
+/* NAV */
+nav {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 18px 60px;
+border-bottom: 1px solid rgba(255,85,0,0.2);
+position: sticky;
+top: 0;
+background: var(--cream);
+z-index: 100;
+}
+
+.nav-name {
+display: flex;
+align-items: center;
+gap: 10px;
+text-decoration: none;
+}
+
+.nav-logo {
+width: 36px;
+height: 36px;
+object-fit: contain;
+mix-blend-mode: multiply;
+}
+
+.nav-name-text {
+font-family: 'Instrument Serif', serif;
+font-size: 1.1rem;
+letter-spacing: 0.01em;
+color: var(--orange);
+}
+
+.nav-links {
+display: flex;
+gap: 36px;
+list-style: none;
+}
+
+.nav-links a {
+text-decoration: none;
+font-size: 0.82rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--orange);
+opacity: 0.7;
+transition: opacity 0.2s;
+}
+
+.nav-links a:hover { opacity: 1; }
+
+/* HERO */
+.hero {
+padding: 100px 60px 80px;
+display: grid;
+grid-template-columns: 420px 1fr;
+gap: 60px;
+align-items: start;
+}
+
+.hero-label {
+font-size: 0.75rem;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--accent);
+margin-bottom: 20px;
+}
+
+h1 {
+font-family: 'Instrument Serif', serif;
+font-size: clamp(2.8rem, 5vw, 4.2rem);
+line-height: 1.1;
+color: var(--black);
+font-weight: 400;
+}
+
+h1 em {
+font-style: italic;
+color: var(--accent);
+}
+
+.hero-meta {
+display: flex;
+flex-direction: column;
+gap: 28px;
+}
+
+.meta-item label {
+font-size: 0.72rem;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--muted);
+display: block;
+margin-bottom: 6px;
+}
+
+.meta-item p {
+font-size: 0.95rem;
+color: var(--text);
+}
+
+.tag-row {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-top: 4px;
+}
+
+.tag {
+background: var(--orange);
+color: white;
+padding: 5px 14px;
+border-radius: 99px;
+font-size: 0.72rem;
+letter-spacing: 0.08em;
+font-weight: 500;
+}
+
+/* DIVIDER */
+.divider {
+height: 1px;
+background: var(--rule);
+margin: 0 60px;
+}
+
+/* SECTIONS */
+.section {
+margin: 0 auto;
+padding: 80px 60px;
+display: grid;
+grid-template-columns: 420px 1fr;
+gap: 60px;
+}
+
+.section-label {
+font-size: 0.72rem;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--muted);
+padding-top: 6px;
+line-height: 1.4;
+}
+
+.section-content h2 {
+font-family: 'Instrument Serif', serif;
+font-size: 1.9rem;
+font-weight: 400;
+color: var(--black);
+margin-bottom: 20px;
+line-height: 1.2;
+}
+
+.section-content p {
+color: var(--text);
+margin-bottom: 16px;
+}
+
+.section-content p:last-child { margin-bottom: 0; }
+
+/* FULL-BLEED IMAGE BREAK */
+.img-break {
+padding: 0 60px;
+margin: 0 0 0 0;
+}
+
+.img-break img {
+width: 100%;
+display: block;
+border-radius: 8px;
+}
+
+.img-break-grid {
+padding: 0 60px;
+display: grid;
+gap: 24px;
+}
+
+.img-break-grid img {
+width: 100%;
+display: block;
+border-radius: 8px;
+}
+
+.img-caption {
+font-size: 0.8rem;
+color: var(--muted);
+margin-top: 10px;
+}
+
+/* PULL QUOTE */
+.pull-quote {
+background: var(--orange);
+color: white;
+padding: 56px 60px;
+margin: 0;
+}
+
+.pull-quote blockquote {
+max-width: 820px;
+margin: 0 auto;
+font-family: 'Instrument Serif', serif;
+font-style: italic;
+font-size: clamp(1.4rem, 2.5vw, 2rem);
+line-height: 1.45;
+color: white;
+}
+
+.pull-quote cite {
+display: block;
+margin-top: 20px;
+font-family: 'DM Sans', sans-serif;
+font-style: normal;
+font-size: 0.8rem;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.7);
+}
+
+/* INSIGHTS GRID */
+.insights-grid {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 1px;
+background: var(--rule);
+border: 1px solid var(--rule);
+margin-top: 32px;
+}
+
+.insight-card {
+background: var(--off-white);
+padding: 32px 28px;
+}
+
+.insight-card h4 {
+font-size: 0.75rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--accent);
+margin-bottom: 12px;
+}
+
+.insight-card p {
+font-size: 0.9rem;
+color: var(--text);
+margin: 0;
+}
+
+/* DECISIONS */
+.decision-list {
+display: flex;
+flex-direction: column;
+gap: 36px;
+margin-top: 32px;
+}
+
+.decision {
+display: grid;
+grid-template-columns: 64px 1fr;
+gap: 40px;
+align-items: start;
+}
+
+.decision-num {
+font-family: 'Instrument Serif', serif;
+font-size: 2.4rem;
+color: var(--rule);
+line-height: 1;
+font-weight: 400;
+}
+
+.decision h3 {
+font-size: 1rem;
+font-weight: 500;
+color: var(--black);
+margin-bottom: 8px;
+}
+
+.decision p {
+font-size: 0.92rem;
+color: var(--muted);
+margin: 0;
+}
+
+.metrics-bar {
+background: #1c1a17;
+padding: 64px 0;
+}
+
+.metrics-inner {
+padding: 0 60px;
+}
+
+.metrics-label {
+font-size: 0.72rem;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--accent);
+margin-bottom: 40px;
+}
+
+.metrics-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 40px;
+}
+
+.metric h3 {
+font-family: 'Instrument Serif', serif;
+font-size: 3rem;
+font-weight: 400;
+color: #fdf9f5;
+line-height: 1;
+margin-bottom: 8px;
+}
+
+.metric p {
+font-size: 0.88rem;
+color: #7a7670;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+}
+
+/* TRADEOFF */
+.tradeoff-box {
+background: #f5f3ef;
+border: 1px solid var(--rule);
+padding: 36px;
+margin-top: 32px;
+}
+
+.tradeoff-box h4 {
+font-size: 0.75rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--muted);
+margin-bottom: 14px;
+}
+
+.tradeoff-box p {
+font-size: 0.92rem;
+color: var(--text);
+margin: 0;
+}
+
+/* ROADMAP */
+.roadmap {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1px;
+background: var(--rule);
+border: 1px solid var(--rule);
+margin-top: 32px;
+}
+
+.roadmap-phase {
+background: var(--off-white);
+padding: 28px 24px;
+}
+
+.roadmap-phase h4 {
+font-size: 0.72rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--accent);
+margin-bottom: 10px;
+}
+
+.roadmap-phase h3 {
+font-size: 0.95rem;
+font-weight: 500;
+color: var(--black);
+margin-bottom: 12px;
+}
+
+.roadmap-phase ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.roadmap-phase li {
+font-size: 0.82rem;
+color: var(--muted);
+padding-left: 12px;
+position: relative;
+}
+
+.roadmap-phase li::before {
+content: '—';
+position: absolute;
+left: 0;
+color: var(--rule);
+}
+
+/* FOOTER */
+footer {
+border-top: 1px solid rgba(255,85,0,0.2);
+padding: 10px 32px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: var(--cream);
+}
+
+.footer-left {
+font-size: 0.62rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(--muted);
+}
+
+.footer-right {
+font-size: 0.62rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(--muted);
+}
+
+.proto-link {
+display: inline-block;
+background: var(--black);
+color: var(--off-white);
+padding: 12px 28px;
+text-decoration: none;
+font-size: 0.8rem;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+transition: background 0.2s;
+}
+
+.proto-link:hover { background: var(--accent); }
+
+@media (max-width: 860px) {
+nav { padding: 20px 24px; }
+.hero, .section { padding: 60px 24px; grid-template-columns: 1fr; gap: 32px; }
+.pull-quote, .metrics-bar { padding: 48px 24px; }
+.divider { margin: 0 24px; }
+.metrics-grid, .insights-grid { grid-template-columns: 1fr; }
+.roadmap { grid-template-columns: 1fr 1fr; }
+footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+.img-break { padding: 0 24px; }
+.metrics-inner { padding: 0 24px; }
+}
+
+@media (max-width: 1100px) {
+#scrolly-copilot { display: block !important; padding: 0 24px !important; }
+#scrolly-copilot-text { display: none !important; }
+#scrolly-copilot-sticky { display: none !important; }
+#scrolly-copilot-mobile { display: flex !important; }
+}
+
+@media (max-width: 1200px) and (min-width: 861px) {
+.section { grid-template-columns: 200px 1fr; }
+.hero { grid-template-columns: 200px 1fr; }
+.section-label { font-size: 0.65rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+<a href="index.html" class="nav-name">
+<span class="nav-name-text">Grace Lee</span>
+</a>
+<ul class="nav-links">
+<li><a href="index.html">Work</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+<div>
+<h1>Regal Copilot</h1>
+<p style="margin-top: 16px; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);">Designing an Agentic Layer for Regal.ai</p>
+</div>
+<div class="hero-meta">
+<div class="meta-item">
+<label>Overview</label>
+<p style="font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Regal's Copilot is an agentic layer in Regal that enables teams to create, test, deploy, and optimize customer experience workflows across the entire Regal platform with minimal manual intervention.</p>
+</div>
+<div class="meta-item">
+<label>Role</label>
+<p>Principal Product Designer</p>
+<p style="margin-top: 10px; font-size: 0.88rem; color: var(--muted); line-height: 1.6;">Evolved the Copilot product beyond the MVP by conducting user research and usability testing and defining the product strategy.</p>
+</div>
+<div class="meta-item">
+<label>Scope</label>
+<div class="tag-row">
+<span class="tag">Product Strategy</span>
+<span class="tag">User Research</span>
+<span class="tag">Interaction Design</span>
+<span class="tag">Prototyping & Testing</span>
+<span class="tag">Stakeholder Alignment</span>
+</div>
+</div>
+<div class="meta-item">
+<label>Timeline</label>
+<p>Q2 2026 (MVP launch) → Ongoing/In Progress</p>
+</div>
+</div>
+</section>
+
+<div class="img-break" style="padding-bottom: 80px;">
+<div id="hero-anim-wrapper" style="width: 100%; border-radius: 8px; overflow: hidden; position: relative;">
+  <iframe class="scale-frame" id="hero-anim-frame" src="animations/copilot-hero-animation.html" scrolling="no" style="width: 1088px; height: 777px; border: none; display: block; transform-origin: top left;" title="Copilot hero animation"
+    onload="this.dataset.loaded='true'"
+    onerror="document.getElementById('hero-anim-wrapper').innerHTML='<img src=\'images/copilot-hero.png\' style=\'width:100%;display:block;border-radius:8px;\' alt=\'Regal Copilot hero\'>'">
+  </iframe>
+  <img id="hero-fallback" src="images/copilot-hero.png" alt="Regal Copilot hero"
+    style="position: absolute; top: 0; left: 0; width: 100%; display: none; border-radius: 8px;">
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BACKGROUND -->
+<section class="section">
+<div class="section-label">Background</div>
+<div class="section-content">
+<h2>Regal's Big Bet</h2>
+<p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Our new mantra: Regal builds; customers guide.</p>
+<p>Managing and optimizing Regal, a full suite CCaaS platform with omnichannel AI agents, requires ongoing management, monitoring, and iteration cycles from customers and Regal's internal teams. Regal's new vision of AI building AI aims to fundamentally change that so primary workflows would instead be handled by an AI-driven Copilot feature that works alongside users.</p>
+<p style="margin-top: 16px;">The goal of Copilot is to shorten time-to-value and scale quality and performance across every use case with minimal manual intervention.</p>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THE PROBLEM -->
+<section class="section">
+<div class="section-label">The Inflection Point</div>
+<div class="section-content">
+<h2>We have the MVP — Now What?</h2>
+<p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">The Problem</p>
+<p>A couple weeks after the MVP launched, the data looked promising:</p>
+
+<div class="insights-grid" style="grid-template-columns: 1fr 1fr;">
+<div class="insight-card">
+<h4>Users</h4>
+<p style="font-family: 'Instrument Serif', serif; font-size: 2.2rem; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px;">165</p>
+<p style="font-size: 0.82rem; color: var(--muted);">Across 73 brands</p>
+</div>
+<div class="insight-card">
+<h4>Sessions</h4>
+<p style="font-family: 'Instrument Serif', serif; font-size: 2.2rem; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px;">680</p>
+<p style="font-size: 0.82rem; color: var(--muted);">Total sessions</p>
+</div>
+<div class="insight-card">
+<h4>Output</h4>
+<p style="font-family: 'Instrument Serif', serif; font-size: 2.2rem; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px;">30</p>
+<p style="font-size: 0.82rem; color: var(--muted);">Agents created</p>
+</div>
+<div class="insight-card">
+<h4>Output</h4>
+<p style="font-family: 'Instrument Serif', serif; font-size: 2.2rem; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px;">170</p>
+<p style="font-size: 0.82rem; color: var(--muted);">Tests generated</p>
+</div>
+</div>
+
+<p style="margin-top: 32px;">The MVP validated demand; however; adoption and intent resolution remained below target:</p>
+
+<table style="width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.9rem;">
+<thead>
+<tr style="border-bottom: 1px solid var(--rule);">
+<th style="text-align: left; padding: 12px 0; font-weight: 500; color: var(--black);">Metric</th>
+<th style="text-align: center; padding: 12px 0; font-weight: 500; color: var(--black);">Current</th>
+<th style="text-align: center; padding: 12px 0; font-weight: 500; color: var(--black);">Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid var(--rule);">
+<td style="padding: 16px 0; color: var(--text);">Weekly Active Usage</td>
+<td style="padding: 16px 0; text-align: center; color: var(--text);">18%</td>
+<td style="padding: 16px 0; text-align: center; color: var(--text);">90%</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--rule);">
+<td style="padding: 16px 0; color: var(--text);">Intent Resolution</td>
+<td style="padding: 16px 0; text-align: center; color: var(--text);">70%</td>
+<td style="padding: 16px 0; text-align: center; color: var(--text);">90%</td>
+</tr>
+</tbody>
+</table>
+
+<p style="margin-top: 16px;">With adoption and intent resolution rates far from target goals, what would be the next highest impact investment to close that gap?</p>
+
+<p style="margin-top: 16px;">After presenting ideas informed by competitive analysis at the kickoff of this project, the CTO, PM, and I aligned on a broader vision for Copilot: an agentic layer that could both collaborate with users in a dedicated workspace and surface throughout the platform contextually. Two directions emerged:</p>
+
+<div class="decision-list">
+<div class="decision">
+<span class="decision-num">01</span>
+<div>
+<h3>Workbench</h3>
+<p>A dedicated environment where users and Copilot could build, test, and iterate together.</p>
+<img src="images/workbench-lofi.png" style="width: 100%; display: block; border-radius: 8px; margin-top: 16px;" alt="Workbench concept">
+</div>
+</div>
+<div class="decision">
+<span class="decision-num">02</span>
+<div>
+<h3>Widget</h3>
+<p>An embedded experience that could surface throughout Regal to provide contextual assistance inside existing workflows.</p>
+<img src="images/widget-lofi.png" style="width: 100%; display: block; border-radius: 8px; margin-top: 16px;" alt="Widget concept">
+</div>
+</div>
+</div>
+
+<p style="margin-top: 32px;">Due to resource constraints, both ideas could not be pursued simultaneously. The core strategic question became:</p>
+<p style="margin-top: 16px; font-style: italic;">Should we improve Copilot's visibility throughout the app or create a dedicated collaborative experience where users can work with Copilot?</p>
+<p style="margin-top: 16px;">Investing in the Widget would be a discoverability bet and investing in Workbench would be a workflow bet. I had a hunch that the Workbench represented a higher-leverage investment.</p>
+
+<div class="tradeoff-box">
+<h4>Hypothesis</h4>
+<p>I believed that adoption was being constrained less by discoverability and more by workflow fragmentation, therefore improving visibility alone would not meaningfully increase adoption or intent resolution. To validate that assumption, I needed to understand not only what users preferred but what would actually increase adoption and intent resolution.</p>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section class="section">
+<div class="section-label">Exploratory Research</div>
+<div class="section-content">
+<h2>Evaluating Two Futures</h2>
+<p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Validating Ideas for Design Direction with Prototyping & Testing</p>
+<p>To validate my hypothesis, I built clickable Prototypes on Claude to run a usability study. I interviewed 5 Copilot MVP users. All self-proclaimed "tab warriors" said the current workflow - Copilot in one tab and the builder in another - works just fine.</p>
+
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+<div>
+<img src="images/workbench.gif" style="width: 100%; display: block; border-radius: 8px;" alt="Workbench prototype">
+<p class="img-caption" style="margin-top: 8px;">Workbench Prototype</p>
+</div>
+<div>
+<img src="images/widget.gif" style="width: 100%; display: block; border-radius: 8px;" alt="Widget prototype">
+<p class="img-caption" style="margin-top: 8px;">Widget Prototype</p>
+</div>
+</div>
+
+<p style="margin-top: 24px;">When introduced with the Workbench concept, the reaction was an immediate strong preference (lots of oohs and aahs). The split-pane environment didn't just reduce friction, it changed how users perceived Copilot - from an assistant to collaborator.</p>
+
+<blockquote style="margin-top: 24px; padding: 28px 32px; background: white; border-left: 3px solid var(--orange); border-radius: 0;">
+<p style="font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--black); line-height: 1.5; margin-bottom: 12px;">"I'm building with the AI and it's not AI building for me."</p>
+<cite style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-style: normal;">Copilot MVP User, Usability Study</cite>
+<p style="font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--black); line-height: 1.5; margin-top: 24px; margin-bottom: 12px;">"It feels like I have a buddy."</p>
+<cite style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-style: normal;">Copilot MVP User, Usability Study</cite>
+</blockquote>
+
+<p style="margin-top: 32px;">The widget was received with less fanfare but users saw value in it for in-context debugging but did not think it was a natural fit for building.</p>
+<p style="margin-top: 16px;">A few key expectations emerged:</p>
+
+<ul style="margin: 12px 0 0 20px; display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+<li>Users expected the Workbench to be editable: making minor changes themselves in the workbench and prompting Copilot in the chat area for bigger changes</li>
+<li>Seeing a diff increased trust by making Copilot's changes feel reviewable and controlled</li>
+</ul>
+
+<div class="tradeoff-box">
+<h4>Conclusion</h4>
+<p>Workbench and widget are not necessarily competing investments. Workbench addressed the most immediate friction users experience today: a fragmented process of building with Copilot. Widget feels like a natural extension of the vision that could be phased into the workflow later. Based on these findings, we aligned on Workbench as the next major Copilot investment.</p>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- UNDERSTANDING EXPERTS -->
+<section class="section">
+<div class="section-label">Research to Inform Designs</div>
+<div class="section-content">
+<h2>Understanding How Experts Build Agents</h2>
+<p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Working with Constraints</p>
+<p>With Workbench validated as the direction, I initially advocated for iframing the existing AI Agent Builder into the Workbench Panel. It would provide users an editable environment immediately - allowing us to learn quickly.</p>
+<p style="margin-top: 16px;">As we explored the concept further, I began questioning one of my own assumptions: if Copilot was responsible for much of the construction process, should users still interact with an interface designed for manual configuration?</p>
+<p style="margin-top: 16px;">To answer that, I shadowed five members of Regal's FDE team, mapped their workflows from creation through launch, and conducted a card sorting exercise to understand how they mentally organized the agent building process.</p>
+
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+<div>
+<img src="images/fde-workflow.png" style="width: 100%; display: block; border-radius: 8px;" alt="FDE workflow diagram">
+<p class="img-caption" style="margin-top: 8px;">FDE Workflow</p>
+</div>
+<div>
+<img src="images/fde-mental-model.png" style="width: 100%; display: block; border-radius: 8px;" alt="FDE mental model">
+<p class="img-caption" style="margin-top: 8px;">FDE Mental Model</p>
+</div>
+</div>
+
+<p style="margin-top: 24px;">The observations from these sessions revealed that users worked in phases, spending most of their time iterating on agent behavior while testing continuously, and refining specific portions and preserving syntax they've had previous success with.</p>
+<p style="margin-top: 16px;">The insights led to three design principles that shaped the Workbench experience:</p>
+
+<div class="decision-list">
+<div class="decision">
+<span class="decision-num">01</span>
+<div>
+<h3>Shift from Configuration to Authorship</h3>
+<p>To better support user behavior, I moved away from the existing form-based builder and towards a document-style workspace (like Notion). By making the agent feel editable and legible, users could collaborate with Copilot while maintaining direct control over the final output.</p>
+</div>
+</div>
+<div class="decision">
+<span class="decision-num">02</span>
+<div>
+<h3>Organize the Workflow into Stages</h3>
+<p>The Workbench should reflect the progression of the workflow by surfacing the right tools at the right stage of the workflow rather than exposing everything simultaneously.</p>
+</div>
+</div>
+<div class="decision">
+<span class="decision-num">03</span>
+<div>
+<h3>Keep Testing Embedded</h3>
+<p>Because users test continuously with every meaningful change, testing should not exist as a separate destination and should remain integrated with the building workflow.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section class="section">
+<div class="section-label">Solution</div>
+<div class="section-content" style="padding-bottom: 24px;">
+<h2>A Collaborative Workbench</h2>
+<p style="font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px;">Hi Fidelity Designs</p>
+<p>The resulting Workbench is organized around the natural progression of agent creation observed during research. Rather than surfacing each configuration upfront like we do today, the experience is restructured around how users naturally build agents. By guiding users via stages, the Workbench reduces cognitive overhead while preserving the flexibility and control.</p>
+</div>
+</section>
+
+<!-- SCROLLYTELLING DESKTOP -->
+<div id="scrolly-copilot" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 60px; position: relative;">
+
+  <!-- Left: text steps -->
+  <div id="scrolly-copilot-text" style="position: relative;">
+    <div class="scrolly-copilot-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Document Workspace</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">An Agent You Can Author</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Rather than presenting agents as a collection of forms and settings, Workbench treats them as an editable document. This makes the agent easier to understand, refine, and collaborate on with Copilot.</p>
+      </div>
+    </div>
+    <div class="scrolly-copilot-step" data-index="1" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Change Navigator</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Stay Oriented While Iterating</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">A navigator highlights modified sections and navigates users throughout the document, allowing them to quickly identify Copilot's edits and review changes with confidence and precision.</p>
+      </div>
+    </div>
+    <div class="scrolly-copilot-step" data-index="2" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Unified Editing Surface</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Task Steps and Actions in Context</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Builders frequently moved between Task Steps and Actions when refining behavior. Workbench brings these concepts together and surfaces action details inline, reducing context switching and making behavior easier to reason about.</p>
+      </div>
+    </div>
+    <div class="scrolly-copilot-step" data-index="3" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Modular Workspaces</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Complexity Only When Needed</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Advanced configurations open in dedicated workspaces rather than competing for attention in a single view. This keeps the primary experience approachable while preserving access to powerful functionality.</p>
+      </div>
+    </div>
+    <div class="scrolly-copilot-step" data-index="4" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">05 — Embedded Testing</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Validate Changes Without Leaving the Workflow</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Research confirmed that testing is woven into the building process. Workbench keeps testing embedded within the agent builder experience, allowing users to validate changes, refine prompts, and iterate on agent behavior without switching contexts.</p>
+      </div>
+    </div>
+    <div class="scrolly-copilot-step" data-index="5" style="min-height: 100vh; display: flex; align-items: center; padding: 80px 0;">
+      <div>
+        <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">06 — Guided Workflow</p>
+        <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Keeping Attention Focused</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">Research showed that builders focus on agent behavior first and operational settings later. Workbench reflects this natural progression by guiding users from the agent behavior to post-call workflows like AI Analysis and dispositions and advanced call settings.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: sticky image -->
+  <div id="scrolly-copilot-sticky" style="position: sticky; top: 80px; height: calc(100vh - 160px); display: flex; align-items: center; align-self: start;">
+    <div style="position: relative; width: 100%;">
+      <div id="scrolly-copilot-img-0" style="width: 100%; border-radius: 8px; overflow: hidden; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 0.4s ease;">
+        <iframe class="scale-frame" src="animations/copilot-typing-composite.html" scrolling="no" style="width: 1088px; height: 661px; border: none; display: block; transform-origin: top left;" title="Document Workspace animation"></iframe>
+      </div>
+      <img id="scrolly-copilot-img-1" src="images/change-navi.gif" alt="Change Navigator" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-copilot-img-2" src="images/action-popover.gif" alt="Unified Editing Surface" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-copilot-img-3" src="images/tabs.gif" alt="Modular Workspaces" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-copilot-img-4" src="images/test-llm.gif" alt="Embedded Testing" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <img id="scrolly-copilot-img-5" src="images/mod-workspace.gif" alt="Guided Workflow" style="width: 100%; border-radius: 8px; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.4s ease;" />
+      <!-- spacer — sets container height to iframe aspect ratio -->
+      <div style="width: 100%; padding-bottom: 60.75%; visibility: hidden;"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SCROLLYTELLING MOBILE -->
+<div id="scrolly-copilot-mobile" style="display: none; flex-direction: column; gap: 60px; padding: 60px 24px;">
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">01 — Document Workspace</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">An Agent You Can Author</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Rather than presenting agents as a collection of forms and settings, Workbench treats them as an editable document. This makes the agent easier to understand, refine, and collaborate on with Copilot.</p>
+    <div style="width: 100%; border-radius: 8px; overflow: hidden;">
+      <iframe class="scale-frame" src="animations/copilot-typing-composite.html" scrolling="no" style="width: 1088px; height: 661px; border: none; display: block; transform-origin: top left;" title="Document Workspace animation"></iframe>
+    </div>
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">02 — Change Navigator</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Stay Oriented While Iterating</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">A navigator highlights modified sections and navigates users throughout the document, allowing them to quickly identify Copilot's edits and review changes with confidence and precision.</p>
+    <img src="images/change-navi.gif" alt="Change Navigator" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">03 — Unified Editing Surface</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Task Steps and Actions in Context</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Builders frequently moved between Task Steps and Actions when refining behavior. Workbench brings these concepts together and surfaces action details inline, reducing context switching and making behavior easier to reason about.</p>
+    <img src="images/action-popover.gif" alt="Unified Editing Surface" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">04 — Modular Workspaces</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Complexity Only When Needed</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Advanced configurations open in dedicated workspaces rather than competing for attention in a single view. This keeps the primary experience approachable while preserving access to powerful functionality.</p>
+    <img src="images/tabs.gif" alt="Modular Workspaces" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">05 — Embedded Testing</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Validate Changes Without Leaving the Workflow</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Research confirmed that testing is woven into the building process. Workbench keeps testing embedded within the agent builder experience, allowing users to validate changes, refine prompts, and iterate on agent behavior without switching contexts.</p>
+    <img src="images/test-llm.gif" alt="Embedded Testing" style="width: 100%; border-radius: 8px;" />
+  </div>
+  <div>
+    <p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">06 — Guided Workflow</p>
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-weight: 400; color: var(--black); margin-bottom: 16px; line-height: 1.3;">Keeping Attention Focused</h3>
+    <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Research showed that builders focus on agent behavior first and operational settings later. Workbench reflects this natural progression by guiding users from the agent behavior to post-call workflows like AI Analysis and dispositions and advanced call settings.</p>
+    <img src="images/mod-workspace.gif" alt="Guided Workflow" style="width: 100%; border-radius: 8px;" />
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OUTCOME -->
+<div class="divider"></div>
+<section style="padding: 80px 60px;">
+<p style="font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 32px;">In Progress — Q2 2026</p>
+<h2 style="font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; color: var(--black); margin-bottom: 32px; line-height: 1.2;">Outcome</h2>
+<p style="max-width: 720px; color: var(--text); margin-bottom: 16px;">What began as an attempt to increase feature adoption ultimately reframed Copilot's role in the product. Rather than acting as an assistant that completed isolated tasks, the research revealed that Copilot should be positioned as a collaborator embedded within users' workflow.</p>
+<p style="max-width: 720px; color: var(--text); margin-bottom: 64px;">The Workbench is currently in development and serves as the foundation for the next generation of Copilot experiences and also advances Regal's longer-term vision of AI building AI. For that vision to succeed, users must trust AI-generated outputs enough to adopt them in production workflows. The Workbench was designed to create transparency, control, and collaboration, making AI-generated work feel legible rather than opaque.</p>
+</section>
+
+<script>
+const copilotSteps = document.querySelectorAll('#scrolly-copilot-text .scrolly-copilot-step');
+const copilotImgs = [
+  document.getElementById('scrolly-copilot-img-0'),
+  document.getElementById('scrolly-copilot-img-1'),
+  document.getElementById('scrolly-copilot-img-2'),
+  document.getElementById('scrolly-copilot-img-3'),
+  document.getElementById('scrolly-copilot-img-4'),
+  document.getElementById('scrolly-copilot-img-5'),
+];
+
+function updateScrollyCopilot() {
+  let active = 0;
+  copilotSteps.forEach((step) => {
+    const rect = step.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.55) {
+      active = parseInt(step.dataset.index);
+    }
+  });
+  copilotImgs.forEach((img, i) => {
+    if (img) img.style.opacity = i === active ? '1' : '0';
+  });
+}
+
+window.addEventListener('scroll', updateScrollyCopilot);
+updateScrollyCopilot();
+
+function scaleFrame(frame) {
+  const wrapper = frame.parentElement;
+  const scale = wrapper.offsetWidth / 1088;
+  frame.style.transform = `scale(${scale})`;
+  const nativeHeight = frame.id === 'hero-anim-frame' ? 777 : 661;
+  wrapper.style.height = (nativeHeight * scale) + 'px';
+}
+
+const frameObserver = new ResizeObserver(entries => {
+  entries.forEach(entry => {
+    const frame = entry.target.querySelector('.scale-frame');
+    if (frame) scaleFrame(frame);
+  });
+});
+
+document.querySelectorAll('.scale-frame').forEach(frame => {
+  frameObserver.observe(frame.parentElement);
+  scaleFrame(frame);
+});
+</script>
+
+<!-- FOOTER -->
+<footer>
+<span class="footer-left">Grace Lee — Portfolio</span>
+<span class="footer-right">© 2026</span>
+</footer>
+
+</body>
+</html>
