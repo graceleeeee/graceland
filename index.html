@@ -54,6 +54,19 @@
     padding: 0;
   }
 
+  /* STAGE — fixed 1440×700 design board that holds every card + object.
+     JS (fitStage) scales it as one unit and centers it, so cards keep their
+     relative layout on every screen size and never stack. Positions inside
+     are in design px (as laid out on a 13" laptop). */
+  .stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 700px;
+    transform-origin: 0 0;
+  }
+
   /* RETRO BROWSER WINDOW BASE */
   .retro-window {
     position: absolute;
@@ -156,7 +169,7 @@
 
   .hero-greeting {
     font-family: 'Instrument Serif', serif;
-    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-size: 3rem;
     color: var(--orange);
     line-height: 1.05;
     min-height: 1.2em;
@@ -597,6 +610,7 @@
 
 <!-- ── DESKTOP CANVAS ───────────────────────────── -->
 <div class="canvas" id="canvas">
+<div class="stage" id="stage">
 
   <!-- TAMAGOTCHI — resume -->
   <div class="pixel-object" id="obj-floppy" style="top: 300px; left: 1090px;">
@@ -783,6 +797,7 @@
     </a>
   </div>
 
+</div><!-- END STAGE -->
 </div><!-- END CANVAS -->
 
 <!-- VISUAL DESIGN MODAL -->
@@ -914,6 +929,43 @@
 </footer>
 
 <script>
+// ── STAGE SCALING — global, runs on all screen sizes ────
+// All desktop cards/objects live inside #stage, a fixed 1440×700 board.
+// fitStage() scales the whole board to fit the window and centers it, so the
+// layout looks the same on every screen and cards can never pile up.
+// Card positions stay in design px — edit the inline top/left as usual.
+const STAGE_W = 1440, STAGE_H = 700;
+const STAGE_MIN_SCALE = 0.6, STAGE_MAX_SCALE = 1.8;
+let stageScale = 1;
+
+function fitStage() {
+  const stage = document.getElementById('stage');
+  const canvas = document.getElementById('canvas');
+  if (!stage || !canvas) return;
+  const footer = document.querySelector('footer');
+  const footerH = footer ? footer.offsetHeight : 0;
+  const pad = 16;
+  const availW = window.innerWidth;
+  const availH = window.innerHeight - footerH - pad;
+  stageScale = Math.min(availW / STAGE_W, availH / STAGE_H);
+  stageScale = Math.max(STAGE_MIN_SCALE, Math.min(STAGE_MAX_SCALE, stageScale));
+  const offsetX = Math.max(0, (availW - STAGE_W * stageScale) / 2);
+  const offsetY = Math.max(0, (availH - STAGE_H * stageScale) / 2);
+  stage.style.transform =
+    `translate(${offsetX}px, ${offsetY}px) scale(${stageScale})`;
+  // let the page scroll if the window is too short for the smallest scale
+  canvas.style.minHeight = Math.max(window.innerHeight,
+    offsetY + STAGE_H * stageScale + footerH + pad) + 'px';
+}
+
+fitStage();
+window.addEventListener('load', fitStage);
+let stageResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(stageResizeTimer);
+  stageResizeTimer = setTimeout(fitStage, 30);
+});
+
 // Only run desktop JS if not mobile
 if (window.innerWidth > 768) { try {
 const greetingEl  = document.getElementById('hero-greeting');
@@ -974,8 +1026,8 @@ function makeDraggable(el) {
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
-    el.style.left = (startL + dx) + 'px';
-    el.style.top  = (startT + dy) + 'px';
+    el.style.left = (startL + dx / stageScale) + 'px';
+    el.style.top  = (startT + dy / stageScale) + 'px';
   });
 
   document.addEventListener('mouseup', e => {
@@ -1011,8 +1063,8 @@ function makeDraggable(el) {
     const dx = t.clientX - startX;
     const dy = t.clientY - startY;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
-    el.style.left = (startL + dx) + 'px';
-    el.style.top  = (startT + dy) + 'px';
+    el.style.left = (startL + dx / stageScale) + 'px';
+    el.style.top  = (startT + dy / stageScale) + 'px';
   }, { passive: true });
 
   el.addEventListener('touchend', () => { dragging = false; moved = false; });
@@ -1042,8 +1094,8 @@ document.querySelectorAll('.pixel-object').forEach(el => {
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
-    el.style.left = (startL + dx) + 'px';
-    el.style.top  = (startT + dy) + 'px';
+    el.style.left = (startL + dx / stageScale) + 'px';
+    el.style.top  = (startT + dy / stageScale) + 'px';
   });
 
   document.addEventListener('mouseup', () => {
@@ -1062,65 +1114,6 @@ document.querySelectorAll('.pixel-object').forEach(el => {
   });
 });
 
-// ── RESPONSIVE REFLOW ON RESIZE ──────────────────────────
-// Store default positions as % of viewport width and % of canvas height
-// After a drag, update the stored values. On resize, reapply.
-
-function initPositions() {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  document.querySelectorAll('.retro-window, .pixel-object').forEach(el => {
-    // Convert inline % / vh / px to px first, then store as fractions
-    let left = el.style.left || '0';
-    let top  = el.style.top  || '0';
-
-    let leftPx, topPx;
-    if (left.includes('%'))       leftPx = parseFloat(left) / 100 * vw;
-    else if (left.includes('px')) leftPx = parseFloat(left);
-    else                          leftPx = 0;
-
-    if (top.includes('vh'))       topPx = parseFloat(top) / 100 * vh;
-    else if (top.includes('px'))  topPx = parseFloat(top);
-    else                          topPx = 0;
-
-    // Write back as px and store fractions
-    el.style.left = leftPx + 'px';
-    el.style.top  = topPx  + 'px';
-    el.dataset.fracLeft = leftPx / vw;
-    el.dataset.fracTop  = topPx  / vh;
-  });
-}
-
-function applyPositions() {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  document.querySelectorAll('.retro-window, .pixel-object').forEach(el => {
-    if (el.dataset.fracLeft !== undefined) {
-      el.style.left = (parseFloat(el.dataset.fracLeft) * vw) + 'px';
-      el.style.top  = (parseFloat(el.dataset.fracTop)  * vh) + 'px';
-    }
-  });
-}
-
-function updateFractions(el) {
-  el.dataset.fracLeft = el.offsetLeft / window.innerWidth;
-  el.dataset.fracTop  = el.offsetTop  / window.innerHeight;
-}
-
-window.addEventListener('load', () => setTimeout(initPositions, 50));
-
-let resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(applyPositions, 30);
-});
-
-// After drag, update stored fractions
-document.addEventListener('mouseup', () => {
-  setTimeout(() => {
-    document.querySelectorAll('.retro-window, .pixel-object').forEach(updateFractions);
-  }, 50);
-});
 document.querySelectorAll('.window-close').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
@@ -1175,41 +1168,6 @@ document.getElementById('obj-swan')?.addEventListener('mouseup', () => {
 });
 
 } catch(e) { console.error("Desktop JS error:", e); } } // end desktop-only JS
-
-// ── POSITION RESET — global, runs on all screen sizes ───
-const originalPositions = {};
-// Store positions immediately from HTML attributes before any JS runs
-document.querySelectorAll('.retro-window, .pixel-object').forEach(el => {
-  const attr = el.getAttribute('style') || '';
-  const leftMatch = attr.match(/left\s*:\s*([\d.]+px)/);
-  const topMatch  = attr.match(/top\s*:\s*([\d.]+px)/);
-  if (leftMatch && topMatch) {
-    originalPositions[el.id] = { left: leftMatch[1], top: topMatch[1] };
-  }
-});
-
-function resetToOriginalPositions() {
-  // Use applyPositions which scales fractions to current viewport
-  // Fractions were set correctly by initPositions on first load
-  applyPositions();
-}
-
-let globalResizeTimer;
-let wasDesktop = window.innerWidth > 768;
-window.addEventListener('resize', () => {
-  clearTimeout(globalResizeTimer);
-  globalResizeTimer = setTimeout(() => {
-    const isDesktop = window.innerWidth > 768;
-    if (isDesktop && !wasDesktop) {
-      resetToOriginalPositions();
-    }
-    wasDesktop = isDesktop;
-  }, 50);
-});
-// Set wasDesktop correctly on load
-window.addEventListener('load', () => {
-  wasDesktop = window.innerWidth > 768;
-});
 
 // ── MOBILE CAROUSEL DRAG ────────────────────────────────
 const carouselWrap = document.getElementById('carousel');
