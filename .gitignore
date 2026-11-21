@@ -1,0 +1,9 @@
+# Secrets — never commit
+.env
+.env.*
+
+# Dependencies and Netlify local state
+node_modules/
+.netlify/
+
+.DS_Store

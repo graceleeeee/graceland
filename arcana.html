@@ -330,7 +330,7 @@ html,body{width:100%;min-height:100vh;background:var(--cream);color:var(--text);
         <button class="t-pill" data-t="Creativity">✧ Create</button>
         <button class="t-pill" data-t="Shadow Work">☽ Shadow</button>
       </div>
-      <textarea class="free-input" id="freeQ" rows="2" placeholder="Or write something specific…"></textarea>
+      <textarea class="free-input" id="freeQ" rows="2" maxlength="500" placeholder="Or write something specific…"></textarea>
     </div>
     <div class="setup-block">
       <p class="sec-label">Step 2</p>
@@ -475,7 +475,7 @@ html,body{width:100%;min-height:100vh;background:var(--cream);color:var(--text);
           <button class="chat-prompt-btn" onclick="sendPrompt(this)">How can I use this energy?</button>
         </div>
         <div class="chat-input-row">
-          <textarea id="chatInput" rows="1" placeholder="Ask about your reading…" oninput="autoResize(this)" onkeydown="handleChatKey(event)" disabled></textarea>
+          <textarea id="chatInput" rows="1" maxlength="500" placeholder="Ask about your reading…" oninput="autoResize(this)" onkeydown="handleChatKey(event)" disabled></textarea>
           <button class="chat-send-btn" onclick="sendChat()" id="chatSendBtn" style="opacity:0.4;pointer-events:none">
             <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
           </button>
@@ -809,15 +809,34 @@ async function doReading(){
   
   // clear any old carousel container
   const oldCC=document.getElementById('carouselContainer');if(oldCC)oldCC.remove();
-  const cardsStr=G.picks.map(p=>`Position "${p.position}": ${p.name} (${p.keywords})`).join('\n');
-  const prompt=`You are a wise, poetic tarot reader. Give a reading using the ${G.layout} spread.\n${topic?`The seeker's focus: ${topic}`:'This is an open general reading.'}\n\nCards drawn:\n${cardsStr}\n\nFor each card provide TWO things:\n- "interpretation": 2-3 evocative, personal sentences (about 40-55 words) connecting the card to its position and the seeker's focus. Be specific to the card's imagery and position — not generic.\n- "detail": 4-6 rich sentences (about 80-110 words) exploring the card more deeply — its symbolism, what it asks of the seeker, what energy or shift is being called for, and any shadow or gift it carries in this position. Make it feel like a real tarot reader speaking directly to the person.\nSpeak directly using "you". Be evocative, warm, and personal — not a dictionary definition.\n\nEnd with an "Overall Message" of 4-5 sentences that weaves the cards together into a coherent arc. Speak to the thread running through the reading and what the seeker is being invited toward.\n\nReturn ONLY valid JSON, no markdown:\n{"cards":[{"position":"...","card":"...","interpretation":"...","detail":"..."}],"overall":"..."}`;
+  // Prompt is built server-side in netlify/functions/arcana.mjs
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2400,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const raw=data.content?.find(b=>b.type==='text')?.text||'';
-    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    renderReading(parsed);
-  }catch(e){console.error('Reading failed:',e);renderFallback();}
+    const data=await callOracle({mode:'reading',layout:G.layout,focus:topic,cards:G.picks.map(p=>p.name)});
+    renderReading(data.reading);
+  }catch(e){console.error('Reading failed:',e);renderReadingError(e.status);}
+}
+
+// ── ORACLE (server proxy) ──
+const MAX_QUESTION_CHARS=500;
+const MAX_CHAT_MESSAGES=20;
+
+async function callOracle(payload){
+  const res=await fetch('/api/arcana',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok){const err=new Error(data.error||`HTTP ${res.status}`);err.status=res.status;err.code=data.error;throw err;}
+  return data;
+}
+
+function oracleErrorText(status,code){
+  if(code==='conversation_limit') return 'The cards have said all they can for this spread. Draw a new reading to keep exploring.';
+  if(status===429) return 'The cards need a moment to rest. Breathe, then try again in a minute.';
+  return 'The veil is too thick right now and the cards won\'t come into focus. Try again in a moment.';
+}
+
+function renderReadingError(status){
+  const feed=document.getElementById('chatFeedInner');
+  feed.innerHTML=`<div class="loading-wrap"><p>${oracleErrorText(status)}</p><button class="chat-prompt-btn" style="margin-top:16px" onclick="doReading()">Try again</button></div>`;
+  document.getElementById('ctaNew')?.classList.remove('cta-disabled');
 }
 
 let carouselData=[];
@@ -981,15 +1000,6 @@ function showChatInput(){
   if(fi) fi.style.paddingBottom='16px';
 }
 
-function renderFallback(){
-  readingData={cards:G.picks.map(p=>({position:p.position,card:p.name,interpretation:p.keywords+'.',detail:'This card speaks to '+p.keywords+'. Sit with its imagery and notice what surfaces as you consider it in the position of "'+p.position+'". The meaning often arrives in layers, revealing more the longer you hold it in mind.'})),overall:'Trust what arose as you drew these cards. Each one holds a mirror to your present moment.'};
-  carouselData=readingData.cards.map((card,i)=>({...card,pick:G.picks[i]}));
-  chatHistory=[];
-  const feed=document.getElementById('chatFeedInner');
-  if(feed) feed.innerHTML='';
-  revealCards(0);
-}
-
 // ── CHAT CONVERSATION ──
 function autoResize(el){
   el.style.height='auto';
@@ -1007,7 +1017,7 @@ function sendPrompt(btn){
 
 async function sendChat(){
   const input=document.getElementById('chatInput');
-  const txt=input.value.trim();
+  const txt=input.value.trim().slice(0,MAX_QUESTION_CHARS);
   if(!txt) return;
   input.value='';
   input.style.height='auto';
@@ -1031,23 +1041,16 @@ async function sendChat(){
   feed.appendChild(typing);
   setTimeout(()=>{typing.classList.add('visible');scrollBottom();},100);
 
-  // Build context
-  const spreadCtx=carouselData.map(c=>`${c.position}: ${c.card} — ${c.interpretation}`).join('\n');
-  const systemPrompt=`You are a wise, poetic tarot reader continuing a conversation about this reading.
-Spread: ${G.layout}${G.topic?'\nFocus: '+G.topic:''}
-Cards drawn:\n${spreadCtx}
-Overall message: ${readingData?.overall||''}
-
-Keep responses warm, personal, and thoughtful — 3-5 sentences. Speak directly to the seeker using "you". Be specific to the cards and context, not generic.`;
-
+  // System prompt is built server-side in netlify/functions/arcana.mjs
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,system:systemPrompt,messages:chatHistory})
+    if(chatHistory.length>MAX_CHAT_MESSAGES){const err=new Error('conversation_limit');err.code='conversation_limit';throw err;}
+    const data=await callOracle({
+      mode:'chat',layout:G.layout,topic:G.topic,
+      cards:carouselData.map(c=>({position:c.pick.position,card:c.pick.name,interpretation:c.interpretation})),
+      overall:readingData?.overall||'',
+      messages:chatHistory
     });
-    const data=await res.json();
-    const reply=data.content?.find(b=>b.type==='text')?.text||'The cards have spoken all they can for now.';
+    const reply=data.reply;
     chatHistory.push({role:'assistant',content:reply});
     typing.classList.remove('visible');
     setTimeout(()=>{
@@ -1062,12 +1065,14 @@ Keep responses warm, personal, and thoughtful — 3-5 sentences. Speak directly 
       }));
     },300);
   }catch(e){
+    console.error('Chat failed:',e);
+    chatHistory.pop(); // drop the unanswered question so history stays user/assistant pairs
     typing.classList.remove('visible');
     setTimeout(()=>{
       typing.remove();
       const errBubble=document.createElement('div');
       errBubble.className='chat-bubble';
-      errBubble.textContent='The cards are quiet for a moment. Try asking again.';
+      errBubble.textContent=oracleErrorText(e.status,e.code);
       feed.appendChild(errBubble);
       requestAnimationFrame(()=>requestAnimationFrame(()=>errBubble.classList.add('visible')));
     },300);
