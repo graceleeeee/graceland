@@ -165,11 +165,12 @@ Mobile (≤768px): `.canvas` is hidden, `.mobile-view` is visible. Normal docume
 These two worlds are fully independent. Never try to make them share layout.
 
 ### Position system — NEVER break these rules
-- initPositions(), applyPositions(), updateFractions() must ALWAYS be globally scoped — never inside the if (window.innerWidth > 768) block
-- initPositions() runs on load before anything else touches elements
-- NEVER add a second window.addEventListener('resize', ...) — use the existing one
-- wasDesktop flag must be set on window load, not at script parse time
-- Inline style="top:Xpx; left:Ypx" on .retro-window and .pixel-object elements are converted to viewport fractions automatically — no extra steps needed when repositioning
+- Every desktop card and pixel object lives inside `<div class="stage" id="stage">` (inside `.canvas`). Never put them directly in `.canvas`.
+- `#stage` is a fixed 1440×700 design board. `fitStage()` scales the whole board with one CSS transform and centers it, so the layout looks identical on every screen size and cards can never stack.
+- Inline `style="top:Xpx; left:Ypx"` are design px on that 1440×700 board (what you'd see on a 13" laptop). Keep everything inside 0–1440 wide and 0–700 tall. Never use %, vw or vh for card positions.
+- Drag code divides mouse movement by `stageScale` — keep that when touching drag logic.
+- `fitStage()` and its single resize listener are global (outside the `if (window.innerWidth > 768)` block). Never add another resize listener that moves cards.
+- Don't use vw-based font sizes inside the stage — the stage already scales.
 
 ### Adding a new desktop card
 Give it: id, class="retro-window card-window", inline style with top/left px, transform:rotate(Xdeg)
@@ -218,7 +219,7 @@ No JS changes needed. When you add a card, add it in BOTH places — desktop can
 
 ### Homepage never-do list
 - Never add a second resize event listener
-- Never move initPositions/applyPositions/updateFractions inside the mobile JS guard
+- Never move fitStage() inside the mobile JS guard
 - Never use position:fixed on canvas cards
 - Never try to stack desktop cards vertically on mobile — use the separate mobile-card instead
 - Never remove the !important flags from the 768px media query

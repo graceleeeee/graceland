@@ -738,7 +738,7 @@ These two worlds do NOT share layout. The desktop canvas uses `position: absolut
 
 ### Desktop world — how cards are positioned
 
-Every card on the desktop canvas is a `.retro-window.card-window` with `position: absolute` and an inline `style="top: Xpx; left: Ypx;"`. The position system converts these to viewport fractions on load so they scale proportionally on resize. **See the golden rules in the position system notes at the top of this file — they must not be broken.**
+Every card on the desktop canvas is a `.retro-window.card-window` with `position: absolute` and an inline `style="top: Xpx; left: Ypx;"`, placed inside `#stage` — a fixed 1440×700 design board. `fitStage()` scales the whole board as one unit and centers it, so the layout keeps its proportions on any screen size and cards never stack. Positions are design px on that board (keep them within 1440×700). **See the golden rules in the position system notes at the top of this file — they must not be broken.**
 
 Current desktop cards and their IDs:
 - `#win-ai` — AI Agent Builder
@@ -850,8 +850,8 @@ No JS changes needed — the carousel drag listener targets `#carousel` which al
 ### What NOT to do on the homepage
 
 - **Never add a second `window.addEventListener('resize', ...)`** — there is already one. Use the existing one.
-- **Never move `initPositions`, `applyPositions`, or `updateFractions` inside the `if (window.innerWidth > 768)` block** — they must stay globally accessible.
+- **Never move `fitStage()` inside the `if (window.innerWidth > 768)` block** — it must stay global. Never place cards outside `#stage` or position them with %/vw/vh.
 - **Never try to make desktop cards stack vertically on mobile** — the correct pattern is a separate `.mobile-card` in the carousel. The two worlds are intentionally separate.
-- **Never give a new card a `position: fixed`** — desktop cards must be `position: absolute` children of `.canvas`.
+- **Never give a new card a `position: fixed`** — desktop cards must be `position: absolute` children of `#stage` (inside `.canvas`).
 - **Never add CSS that targets `.card-window` without checking it won't affect `.mobile-card`** — they are different classes but both represent the same projects.
 - **Never remove the `display: none !important` / `display: flex !important` on the media query** — the `!important` is intentional and load-order dependent.
