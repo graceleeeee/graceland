@@ -1,0 +1,8 @@
+# Static site (no build step) + serverless functions in netlify/functions.
+[functions]
+  directory = "netlify/functions"
+
+# Local development with `netlify dev`
+[dev]
+  framework = "#static"
+  publish = "."
