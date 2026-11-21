@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
+  /* side spacing: 60px normally, grows on big screens so content stops at 1320px wide */
+  --gutter: max(60px, calc((100vw - 1320px) / 2));
     --cream: #fdf9f5;
     --orange: #FF5500;
     --orange-light: #fff3e8;
@@ -36,7 +38,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 60px;
+    padding: 18px var(--gutter);
     border-bottom: 1px solid rgba(255,85,0,0.2);
     position: sticky;
     top: 0;
@@ -79,7 +81,7 @@
 
   /* HERO */
   .hero {
-    padding: 100px 60px 80px;
+    padding: 100px var(--gutter) 80px;
     display: grid;
     grid-template-columns: 420px 1fr;
     gap: 60px;
@@ -140,13 +142,13 @@
   .divider {
     height: 1px;
     background: var(--rule);
-    margin: 0 60px;
+    margin: 0 var(--gutter);
   }
 
   /* SECTIONS */
   .section {
     margin: 0 auto;
-    padding: 80px 60px;
+    padding: 80px var(--gutter);
     display: grid;
     grid-template-columns: 420px 1fr;
     gap: 60px;
@@ -175,7 +177,7 @@
 
   /* FULL-BLEED IMAGE BREAK */
   .img-break {
-    padding: 0 60px;
+    padding: 0 var(--gutter);
     margin: 0 0 0 0;
   }
   .img-break img {
@@ -184,7 +186,7 @@
     border-radius: 8px;
   }
   .img-break-grid {
-    padding: 0 60px;
+    padding: 0 var(--gutter);
     display: grid;
     gap: 24px;
   }
@@ -203,7 +205,7 @@
   .pull-quote {
     background: var(--orange);
     color: white;
-    padding: 56px 60px;
+    padding: 56px var(--gutter);
     margin: 0;
   }
   .pull-quote blockquote {
@@ -289,7 +291,7 @@
     padding: 64px 0;
   }
   .metrics-inner {
-    padding: 0 60px;
+    padding: 0 var(--gutter);
   }
   .metrics-label {
     font-size: 0.72rem;
@@ -733,7 +735,7 @@
   </div>
 </section>
 
-<div style="padding: 0 60px 80px;">
+<div style="padding: 0 var(--gutter) 80px;">
   <div style="margin-bottom: 20px;">
     <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Single State Agent Workflow — Updated 2026</p>
     <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.7;">Use the prototype below <a href="https://www.figma.com/proto/Fw1nj7WnmxAWIsGtVebNSw/Regal.ai---AI-Agent-Builder-Case-Study?page-id=0%3A1&node-id=103-28532&viewport=-7825%2C366%2C0.34&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=103%3A28532" target="_blank" style="color: var(--orange); text-decoration: underline; text-underline-offset: 3px;">or view it in Figma</a> to walk through the end-to-end flow of building an AI Agent — from selecting a template to configuring the agent to testing.</p>
@@ -744,7 +746,7 @@
 </div>
 
 <!-- SCROLLYTELLING HIFI -->
-<div id="scrolly" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 60px; position: relative;">
+<div id="scrolly" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 var(--gutter); position: relative;">
 
   <!-- Left: sticky text panels -->
   <div id="scrolly-text" style="position: relative;">
@@ -924,7 +926,7 @@
 <div class="divider"></div>
 
 <!-- ROADMAP -->
-<section class="section" style="display: block; padding: 80px 60px;">
+<section class="section" style="display: block; padding: 80px var(--gutter);">
   <div class="section" style="padding: 0; margin-bottom: 48px;">
     <div class="section-label">Roadmap Influence</div>
     <div class="section-content">
@@ -1086,7 +1088,7 @@
     </div>
   </div>
 
-<div style="padding: 40px 60px 0 60px;">
+<div style="padding: 40px var(--gutter) 0 var(--gutter);">
   <div style="margin-bottom: 20px;">
     <p style="font-size: 0.88rem; font-weight: 500; color: var(--black); margin-bottom: 8px;">Multi State Agent Workflow — Q2 2026</p>
     <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.7;">Use the prototype below, <a href="https://www.figma.com/proto/Fw1nj7WnmxAWIsGtVebNSw/Regal.ai---AI-Agent-Builder-Case-Study?node-id=115-67934&viewport=-1494%2C-2373%2C0.15&t=z66hHXemuz2NN8V0-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=115%3A67934&show-proto-sidebar=1&page-id=0%3A1" target="_blank" style="color: var(--orange); text-decoration: underline; text-underline-offset: 3px;">or view it in Figma</a>, to walk through a more complex end-to-end flow — exploring the broader platform experience including Conversation Flows, multi-state agents, and Agent Variants for iterative experimentation.</p>
@@ -1099,7 +1101,7 @@
 </section>
 
 <!-- SCROLLYTELLING V2 — inside Roadmap Influence -->
-<div id="scrolly-v2" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 60px; position: relative;">
+<div id="scrolly-v2" style="display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 0 var(--gutter); position: relative;">
   <div id="scrolly-v2-text" style="position: relative;">
     <div class="scrolly-v2-step" data-index="0" style="min-height: 100vh; display: flex; align-items: center; padding: 24px 0 80px;">
       <div>
